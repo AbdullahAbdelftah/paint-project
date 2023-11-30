@@ -13,13 +13,24 @@
       <v-stage :config="configKonva">
         <v-layer>
           <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew"></v-circle>
-          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR"></v-rect>
+          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @click="showResizeForm(index)"></v-rect>
           <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL"></v-line>
           <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS"></v-rect>
           <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE"></v-ellipse>
         </v-layer >
       </v-stage>
     </div>
+  </div>
+  <div v-if="showForm">
+    <label>
+      Width:
+      <input type="number" v-model="resizeForm.width" />
+    </label>
+    <label>
+      Height:
+      <input type="number" v-model="resizeForm.height" />
+    </label>
+    <button @click="applyResize">Apply</button>
   </div>
 </template>
 
@@ -46,6 +57,12 @@ export default {
         ellipses:[],
         
       },
+      showForm: false,
+      selectedShapeIndex: null,
+      resizeForm: {
+        width: false,
+        height: false,
+      },
       shapeIdCounter: 1,
       configKonva: {
         width: 1400,
@@ -54,6 +71,25 @@ export default {
     };
   },
   methods: {
+    showResizeForm(index) {
+      this.selectedShapeIndex = index;
+      this.showForm = true;
+      
+    },
+    applyResize() {
+      if (this.selectedShapeIndex !== null) {
+        const rect = this.shapes.rectangles[this.selectedShapeIndex];
+
+        if (this.resizeForm.width) {
+          rect.width = this.resizeForm.width;
+        }
+
+        if (this.resizeForm.height) {
+          rect.height = this.resizeForm.height;
+        }
+        this.showForm = false;
+      }
+    },
     newInd(index) {
     this.draggedShapeIndex = index;
   },
