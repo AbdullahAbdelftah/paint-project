@@ -1,7 +1,7 @@
 package com.example.demo;
 
 public abstract class Shape {
-    int x;
-    int y;
+    public int x;
+    public int y;
 
 }

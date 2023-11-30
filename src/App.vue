@@ -5,6 +5,7 @@
       <button @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
       <button @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
       <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
+      <button @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
     </div>
     <div class="stage">
       <v-stage :config="configKonva">
@@ -164,9 +165,17 @@ export default {
     if (this.draggedShapeIndex !== null) {
       this.shapes.squares[this.draggedShapeIndex].x = e.target.attrs.x;
       this.shapes.squares[this.draggedShapeIndex].y = e.target.attrs.y;
-      // console.log(this.shapes.squares);
       console.log(JSON.stringify(this.shapes.squares));
     }
+  },
+  save(){
+    fetch('http://localhost:8080/circles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.circles)
+    })
   }
   }
 }
