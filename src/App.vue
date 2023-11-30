@@ -274,20 +274,15 @@ export default {
     console.log(this.shapes.ellipses);
   }
 },
-
-  save(){
+save(){
     fetch('http://localhost:8080/circles', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.shapes.circles)
-    }).then(res=>{
-      return res.json();
-    }).then(response=>{
-      for(let i=0; i<response.length; i++){
-        this.shapes.circles.push(response[i]);
-      }
+    }).catch(err=>{
+      console.log(err);
     })
     fetch('http://localhost:8080/squares', {
       method: 'POST',
@@ -295,12 +290,8 @@ export default {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.shapes.squares)
-    }).then(res=>{
-      return res.json();
-    }).then(response=>{
-      for(let i=0; i<response.length; i++){
-        this.shapes.squares.push(response[i]);
-      }
+    }).catch(err=>{
+      console.log(err);
     })
     fetch('http://localhost:8080/rectangles', {
       method: 'POST',
@@ -308,15 +299,15 @@ export default {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.shapes.rectangles)
-    }).then(res=>{
-      return res.json();
-    }).then(response=>{
-      for(let i=0; i<response.length; i++){
-        this.shapes.rectangles.push(response[i]);
-      }
+    }).catch(err=>{
+      console.log(err);
     })
-    this.write();
-    
+    fetch('http://localhost:8080/writeJson', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
   },
   async write(){
     await fetch('http://localhost:8080/writeJson', {
