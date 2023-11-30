@@ -2,18 +2,21 @@
   <div class="all">
     <div class="bts">
       <button @click="addCircle()"><i class="fa-solid fa-circle"></i></button>
+      <button @click="addEllipse()">ellipse</button>
       <button @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
       <button @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
       <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
       <button @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
+      <button @click="load()"><i class="fa-solid fa-floppy-disk"></i></button>
     </div>
     <div class="stage">
       <v-stage :config="configKonva">
         <v-layer>
-          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="configCircle" @dragend="drageNew"></v-circle>
-          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="configRect" @dragend="drageNewR"></v-rect>
-          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="configLine" @dragend="drageNewL"></v-line>
-          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="configSquare" @dragend="drageNewS"></v-rect>
+          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew"></v-circle>
+          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR"></v-rect>
+          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL"></v-line>
+          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS"></v-rect>
+          <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE"></v-ellipse>
         </v-layer >
       </v-stage>
     </div>
@@ -39,54 +42,35 @@ export default {
         rectangles:[],
         circles: [],
         lines: [],
-        squares:[]
+        squares:[],
+        ellipses:[],
+        
       },
       shapeIdCounter: 1,
       configKonva: {
         width: 1400,
         height: 600
       },
-      configCircle: {
-        x: 100,
-        y: 100,
-        radius: 70,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-        
-      },
-      configRect: {
-        x: 100,
-        y: 100,
-        width:100,
-        height:60,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-        
-      },
-      configLine: {
-        x: 100,
-        y: 100,
-        points: [300, 300, 400, 400],
-        stroke: 'green',
-        strokeWidth: 5,
-      },
-      configSquare: {
-        x: 100,
-        y: 100,
-        width:100,
-        height:100,
-        fill: "pink",
-        stroke: "black",
-        strokeWidth: 4,
-      }
     };
   },
   methods: {
     newInd(index) {
     this.draggedShapeIndex = index;
   },
+  addEllipse() {
+  this.shapes.ellipses.push({
+    index: this.shapes.ellipses.length,
+    id: this.shapeIdCounter++,
+    x: 100,
+    y: 100,
+    radiusX: 70,
+    radiusY: 50,
+    fill: "blue",
+    stroke: "black",
+    strokeWidth: 4,
+  });
+},
+
     addRectangle() {
 
       this.shapes.rectangles.push({
@@ -168,6 +152,14 @@ export default {
       console.log(JSON.stringify(this.shapes.squares));
     }
   },
+  drageNewE(e) {
+  if (this.draggedShapeIndex !== null) {
+    this.shapes.ellipses[this.draggedShapeIndex].x = e.target.attrs.x;
+    this.shapes.ellipses[this.draggedShapeIndex].y = e.target.attrs.y;
+    console.log(this.shapes.ellipses);
+  }
+},
+
   save(){
     fetch('http://localhost:8080/circles', {
       method: 'POST',
@@ -175,7 +167,41 @@ export default {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.shapes.circles)
+    }).then(res=>{
+      return res.json();
+    }).then(response=>{
+      for(let i=0; i<response.length; i++){
+        this.shapes.circles.push(response[i]);
+      }
     })
+    fetch('http://localhost:8080/squares', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.squares)
+    }).then(res=>{
+      return res.json();
+    }).then(response=>{
+      for(let i=0; i<response.length; i++){
+        this.shapes.squares.push(response[i]);
+      }
+    })
+    fetch('http://localhost:8080/rectangles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.rectangles)
+    }).then(res=>{
+      return res.json();
+    }).then(response=>{
+      for(let i=0; i<response.length; i++){
+        this.shapes.rectangles.push(response[i]);
+      }
+    })
+    
+    
   }
   }
 }
