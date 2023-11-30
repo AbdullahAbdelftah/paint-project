@@ -122,10 +122,11 @@ export default {
       }
       if(shape.type==="line"){
         this.shapes.lines[shape.index].fill=this.selectedColor.toLowerCase();
-        if(shape.type==="square"){
+        
+    }
+    if(shape.type==="square"){
         this.shapes.squares[shape.index].fill=this.selectedColor.toLowerCase();
       }
-    }
       }
       this.selectedColor=null;
     },
@@ -156,6 +157,9 @@ export default {
       if(this.selectedShapeType==="ellipse"){
         if (this.resizeForm.width) {
           this.shapes.ellipses[this.selectedShapeIndex].radiusX = this.resizeForm.width;
+          
+        }
+        if(this.resizeForm.height){
           this.shapes.ellipses[this.selectedShapeIndex].radiusY = this.resizeForm.height;
         }
         this.showForm = false;

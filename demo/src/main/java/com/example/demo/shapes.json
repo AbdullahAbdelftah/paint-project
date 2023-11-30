@@ -1,31 +1,74 @@
-[
+[[
   {
     "id": 0,
+    "radius": 70,
+    "fill": "blue",
+    "stroke": "black",
+    "strokeWidth": 4,
+    "x": 335,
+    "y": 194,
+    "type": "circle"
+  },
+  {
+    "id": 1,
     "radius": 70,
     "fill": "red",
     "stroke": "black",
     "strokeWidth": 4,
-    "x": 971,
-    "y": 113
+    "x": 949,
+    "y": 195,
+    "type": "circle"
   }
 ],[
+  {
+    "width": 100,
+    "height": 100,
+    "fill": "yellow",
+    "stroke": "black",
+    "strokeWidth": 4,
+    "x": 270,
+    "y": 50,
+    "type": "square"
+  },
   {
     "width": 100,
     "height": 100,
     "fill": "pink",
     "stroke": "black",
     "strokeWidth": 4,
-    "x": 1199,
-    "y": 408
+    "x": 192,
+    "y": 377,
+    "type": "square"
+  },
+  {
+    "width": 100,
+    "height": 100,
+    "fill": "pink",
+    "stroke": "black",
+    "strokeWidth": 4,
+    "x": 445,
+    "y": 352,
+    "type": "square"
   }
 ],[
   {
     "width": 100,
     "height": 60,
-    "fill": "red",
+    "fill": "magenta",
     "stroke": "black",
     "strokeWidth": 4,
-    "x": 218,
-    "y": 395
+    "x": 701,
+    "y": 80,
+    "type": "rectangle"
+  },
+  {
+    "width": 100,
+    "height": 60,
+    "fill": "black",
+    "stroke": "black",
+    "strokeWidth": 4,
+    "x": 1100,
+    "y": 385,
+    "type": "rectangle"
   }
-]
+]]

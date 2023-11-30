@@ -27,7 +27,7 @@ public class JsonToObject {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Circle>>() {}.getType();
         circle = gson.fromJson(jsonStringFromFrontend, listType);
-        for (Circle c : circle) {
+        for (Shape c : circle) {
             System.out.println(c);
         }
     }
@@ -38,7 +38,7 @@ public class JsonToObject {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Square>>() {}.getType();
         square = gson.fromJson(jsonStringFromFrontend, listType);
-        for (Square c : square) {
+        for (Shape c : square) {
             System.out.println(c);
         }
     }
@@ -49,7 +49,7 @@ public class JsonToObject {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Rectangle>>() {}.getType();
         rectangle = gson.fromJson(jsonStringFromFrontend, listType);
-        for (Rectangle c : rectangle) {
+        for (Shape c : rectangle) {
             System.out.println(c);
         }
     }
@@ -63,13 +63,16 @@ public class JsonToObject {
         String jsonRectangle = gson.toJson(rectangle);
         try {
             FileWriter writer = new FileWriter("src/main/java/com/example/demo/shapes.json");
+            writer.write("[");
             writer.write(jsonCircle);
+            writer.write(",");
             writer.write(jsonSquare);
+            writer.write(",");
             writer.write(jsonRectangle);
+            writer.write("]");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
 }
