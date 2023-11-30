@@ -13,7 +13,7 @@
       <v-stage :config="configKonva">
         <v-layer>
           <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew"></v-circle>
-          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @click="showResizeForm(index)"></v-rect>
+          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @dblclick="showResizeForm(index)"></v-rect>
           <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL"></v-line>
           <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS"></v-rect>
           <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE"></v-ellipse>
@@ -78,14 +78,12 @@ export default {
     },
     applyResize() {
       if (this.selectedShapeIndex !== null) {
-        const rect = this.shapes.rectangles[this.selectedShapeIndex];
-
         if (this.resizeForm.width) {
-          rect.width = this.resizeForm.width;
+          this.shapes.rectangles[this.selectedShapeIndex].width = this.resizeForm.width;
         }
 
         if (this.resizeForm.height) {
-          rect.height = this.resizeForm.height;
+          this.shapes.rectangles[this.selectedShapeIndex].height = this.resizeForm.height;
         }
         this.showForm = false;
       }
@@ -97,6 +95,7 @@ export default {
   this.shapes.ellipses.push({
     index: this.shapes.ellipses.length,
     id: this.shapeIdCounter++,
+    type:"Ellipse",
     x: 100,
     y: 100,
     radiusX: 70,
@@ -112,6 +111,7 @@ export default {
       this.shapes.rectangles.push({
         index: this.shapes.rectangles.length,
         id: this.shapeIdCounter++,
+        type:"rectangle",
         x: 100,
         y: 100,
         width:100,
@@ -126,6 +126,7 @@ export default {
       this.shapes.circles.push({
         index: this.shapes.circles.length,
         id:this.initID++,
+        type:"circle",
         x: 100,
         y: 100,
         radius: 70,
@@ -138,6 +139,7 @@ export default {
     addLine() {
       this.shapes.lines.push({
         index: this.shapes.lines.length,
+        type:"line",
         x: 100,
         y: 100,
         points: [300, 300, 400, 400],
@@ -150,6 +152,7 @@ export default {
       this.shapes.squares.push({
         index: this.shapes.squares.length,
         id: this.shapeIdCounter++,
+        type:"square",
         x: 100,
         y: 100,
         width:100,
@@ -236,8 +239,16 @@ export default {
         this.shapes.rectangles.push(response[i]);
       }
     })
+    this.write();
     
-    
+  },
+  async write(){
+    await fetch('http://localhost:8080/writeJson', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
   }
   }
 }
