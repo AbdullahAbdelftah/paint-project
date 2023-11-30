@@ -1,52 +1,20 @@
 <template>
-  <div>
-    <v-stage :width="width" :height="height">
-      <v-layer>
-        <!-- Render Shapes -->
-        <v-rect
-          v-for="rect in shapes.rectangles"
-          :key="rect.id"
-          :x="rect.x"
-          :y="rect.y"
-          :width="rect.width"
-          :height="rect.height"
-          :fill="rect.fill"
-          :draggable="true"
-          @click="handleShapeClick(rect)"
-        />
+  <v-stage :config="configKonva">
+    <v-layer>
+      <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="configCircle" @dragend="drageNew"></v-circle>
+      <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="configRect" @dragend="drageNewR"></v-rect>
+      <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="configLine" @dragend="drageNewL"></v-line>
 
-        <v-circle
-          v-for="circle in shapes.circles"
-          :key="circle.id"
-          :x="circle.x"
-          :y="circle.y"
-          :radius="circle.radius"
-          :fill="circle.fill"
-          @click="handleShapeClick(circle)"
-        />
-
-        <v-line
-          v-for="line in shapes.lines"
-          :key="line.id"
-          :points="line.points"
-          :stroke="line.stroke"
-          :strokeWidth="line.strokeWidth"
-          @click="handleShapeClick(line)"
-          
-        />
-      </v-layer>
-    </v-stage>
-
-    
-    <div>
-      <button @click="addRectangle">Add Rectangle</button>
-      <button @click="addCircle">Add Circle</button>
-      <button @click="addLine">Add Line</button>
-    </div>
-  </div>
+    </v-layer >
+  </v-stage>
+  <button @click="addCircle()">add circle</button>
+  <button @click="addRectangle()">add rect</button>
+  <button @click="addLine()">add line</button>
 </template>
 
 <script>
+// import { shapes } from 'konva/lib/Shape';
+
 
 
 export default {
@@ -56,24 +24,55 @@ export default {
   },
   data() {
     return {
-      width: 800,
-      height: 600,
+      draggedShapeIndex: null,
+      ind:null,
+      initID:0,
       shapes: {
-        rectangles: [],
+        rectangles:[],
         circles: [],
         lines: [],
       },
       shapeIdCounter: 1,
+      configKonva: {
+        width: 1512,
+        height: 600
+      },
+      configCircle: {
+        x: 100,
+        y: 100,
+        radius: 70,
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 4,
+        
+      },
+      configRect: {
+        x: 100,
+        y: 100,
+        width:50,
+        height:30,
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 4,
+        
+      },
+      configLine: {
+        x: 100,
+        y: 100,
+        points: [300, 300, 400, 400],
+        stroke: 'green',
+        strokeWidth: 5,
+      }
     };
   },
   methods: {
-    handleShapeClick(shape) {
-      console.log(shape.x);
-
-    },
+    newInd(index) {
+    this.draggedShapeIndex = index;
+  },
     addRectangle() {
 
       this.shapes.rectangles.push({
+        index: this.shapes.rectangles.length,
         id: this.shapeIdCounter++,
         x: 50,
         y: 50,
@@ -84,26 +83,48 @@ export default {
       });
       
     },
-    printX(){
-      
-    },
     addCircle() {
       this.shapes.circles.push({
-        id: this.shapeIdCounter++,
-        x: 200,
-        y: 150,
-        radius: 50,
-        fill: 'blue',
+        index: this.shapes.circles.length,
+        id:this.initID++,
+        x: 100,
+        y: 100,
+        radius: 70,
+        fill: 'red',
+
       });
     },
     addLine() {
       this.shapes.lines.push({
-        id: this.shapeIdCounter++,
+        index: this.shapes.lines.length,
+        x: 100,
+        y: 100,
         points: [300, 300, 400, 400],
         stroke: 'green',
         strokeWidth: 5,
       });
     },
+    drageNew(e) {
+    if (this.draggedShapeIndex !== null) {
+      this.shapes.circles[this.draggedShapeIndex].x = e.target.attrs.x;
+      this.shapes.circles[this.draggedShapeIndex].y = e.target.attrs.y;
+      console.log(this.shapes.circles);
+    }
+  },
+  drageNewR(e) {
+    if (this.draggedShapeIndex !== null) {
+      this.shapes.rectangles[this.draggedShapeIndex].x = e.target.attrs.x;
+      this.shapes.rectangles[this.draggedShapeIndex].y = e.target.attrs.y;
+      console.log(this.shapes.rectangles);
+    }
+  },
+  drageNewL(e) {
+    if (this.draggedShapeIndex !== null) {
+      this.shapes.lines[this.draggedShapeIndex].x = e.target.attrs.x;
+      this.shapes.lines[this.draggedShapeIndex].y = e.target.attrs.y;
+      console.log(this.shapes.lines);
+    }
+  }
   }
 }
 </script>
