@@ -1,15 +1,22 @@
 <template>
-  <v-stage :config="configKonva">
-    <v-layer>
-      <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="configCircle" @dragend="drageNew"></v-circle>
-      <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="configRect" @dragend="drageNewR"></v-rect>
-      <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="configLine" @dragend="drageNewL"></v-line>
-
-    </v-layer >
-  </v-stage>
-  <button @click="addCircle()">add circle</button>
-  <button @click="addRectangle()">add rect</button>
-  <button @click="addLine()">add line</button>
+  <div class="all">
+    <div class="bts">
+      <button @click="addCircle()"><i class="fa-solid fa-circle"></i></button>
+      <button @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
+      <button @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
+      <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
+    </div>
+    <div class="stage">
+      <v-stage :config="configKonva">
+        <v-layer>
+          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="configCircle" @dragend="drageNew"></v-circle>
+          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="configRect" @dragend="drageNewR"></v-rect>
+          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="configLine" @dragend="drageNewL"></v-line>
+          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="configSquare" @dragend="drageNewS"></v-rect>
+        </v-layer >
+      </v-stage>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -31,10 +38,11 @@ export default {
         rectangles:[],
         circles: [],
         lines: [],
+        squares:[]
       },
       shapeIdCounter: 1,
       configKonva: {
-        width: 1512,
+        width: 1400,
         height: 600
       },
       configCircle: {
@@ -49,8 +57,8 @@ export default {
       configRect: {
         x: 100,
         y: 100,
-        width:50,
-        height:30,
+        width:100,
+        height:60,
         fill: "red",
         stroke: "black",
         strokeWidth: 4,
@@ -62,6 +70,15 @@ export default {
         points: [300, 300, 400, 400],
         stroke: 'green',
         strokeWidth: 5,
+      },
+      configSquare: {
+        x: 100,
+        y: 100,
+        width:100,
+        height:100,
+        fill: "pink",
+        stroke: "black",
+        strokeWidth: 4,
       }
     };
   },
@@ -74,12 +91,13 @@ export default {
       this.shapes.rectangles.push({
         index: this.shapes.rectangles.length,
         id: this.shapeIdCounter++,
-        x: 50,
-        y: 50,
-        width: 100,
-        height: 80,
-        fill: 'red',
-        DragEvent:true
+        x: 100,
+        y: 100,
+        width:100,
+        height:60,
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 4,
       });
       
     },
@@ -90,7 +108,9 @@ export default {
         x: 100,
         y: 100,
         radius: 70,
-        fill: 'red',
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 4,
 
       });
     },
@@ -104,6 +124,21 @@ export default {
         strokeWidth: 5,
       });
     },
+    addSquare() {
+
+      this.shapes.squares.push({
+        index: this.shapes.squares.length,
+        id: this.shapeIdCounter++,
+        x: 100,
+        y: 100,
+        width:100,
+        height:100,
+        fill: "pink",
+        stroke: "black",
+        strokeWidth: 4,
+    });
+
+},
     drageNew(e) {
     if (this.draggedShapeIndex !== null) {
       this.shapes.circles[this.draggedShapeIndex].x = e.target.attrs.x;
@@ -124,6 +159,14 @@ export default {
       this.shapes.lines[this.draggedShapeIndex].y = e.target.attrs.y;
       console.log(this.shapes.lines);
     }
+  },
+  drageNewS(e) {
+    if (this.draggedShapeIndex !== null) {
+      this.shapes.squares[this.draggedShapeIndex].x = e.target.attrs.x;
+      this.shapes.squares[this.draggedShapeIndex].y = e.target.attrs.y;
+      // console.log(this.shapes.squares);
+      console.log(JSON.stringify(this.shapes.squares));
+    }
   }
   }
 }
@@ -137,5 +180,20 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.all{
+  display: flex;
+}
+
+.stage{
+  border: #2c3e50 1px solid;
+  
+}
+button{
+  width: 50px;
+  height: 50px;
+}
+.bts{
+  width: 200px;
 }
 </style>
