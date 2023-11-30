@@ -8,26 +8,51 @@
       <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
       <button @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
       <button @click="load()"><i class="fa-solid fa-floppy-disk"></i></button>
+      <div>
+        <div v-for="(color, index) in colorPalette" :key="index" @click="setColor(color)">
+          <div :style="{ backgroundColor: color }" class="color-square"></div>
+        </div>
+        <div>
+          Selected Color: {{ selectedColor }}
+        </div>
+      </div>
+      
     </div>
     <div class="stage">
       <v-stage :config="configKonva">
         <v-layer>
-          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew"></v-circle>
-          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @dblclick="showResizeForm(index)"></v-rect>
-          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL"></v-line>
-          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS"></v-rect>
-          <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE"></v-ellipse>
+          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew" @dblclick="showResizeForm(index,circle)" @click="changeColor(circle)"></v-circle>
+          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @dblclick="showResizeForm(index,rect)" @click="changeColor(rect)"></v-rect>
+          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL" @dblclick="showResizeForm(index,line)" @click="changeColor(line)"></v-line>
+          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS" @dblclick="showResizeForm(index,sq)" @click="changeColor(sq)"></v-rect>
+          <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE" @dblclick="showResizeForm(index,ellipse)" @click="changeColor(ellipse)"></v-ellipse>
         </v-layer >
       </v-stage>
     </div>
   </div>
   <div v-if="showForm">
-    <label>
+    <label v-if="selectedShapeType==='rectangle'">
       Width:
       <input type="number" v-model="resizeForm.width" />
     </label>
-    <label>
+    <label v-if="selectedShapeType==='rectangle'">
       Height:
+      <input type="number" v-model="resizeForm.height" />
+    </label>
+    <label v-if="selectedShapeType==='square'">
+      side length:
+      <input type="number" v-model="resizeForm.width" />
+    </label>
+    <label v-if="selectedShapeType==='circle'">
+      radius:
+      <input type="number" v-model="resizeForm.width" />
+    </label>
+    <label v-if="selectedShapeType==='ellipse'">
+      radiusX:
+      <input type="number" v-model="resizeForm.width" />
+    </label>
+    <label v-if="selectedShapeType==='ellipse'">
+      radiusY:
       <input type="number" v-model="resizeForm.height" />
     </label>
     <button @click="applyResize">Apply</button>
@@ -46,6 +71,13 @@ export default {
   },
   data() {
     return {
+      colorPalette: [
+        "#FF0000", "#FF7F00", "#FFFF00", "#7FFF00",
+        "#00FF00", "#00FFFF", "#007FFF",
+        "#0000FF", "#7F00FF", "#FF00FF",
+        "#FFFFFF", "#C0C0C0", "#808080", "#000000"
+      ],
+      selectedColor: null,
       draggedShapeIndex: null,
       ind:null,
       initID:0,
@@ -59,9 +91,10 @@ export default {
       },
       showForm: false,
       selectedShapeIndex: null,
+      selectedShapeType: null,
       resizeForm: {
-        width: false,
-        height: false,
+        width: 0,
+        height: 0,
       },
       shapeIdCounter: 1,
       configKonva: {
@@ -71,38 +104,81 @@ export default {
     };
   },
   methods: {
-    showResizeForm(index) {
+    showResizeForm(index,shape) {
       this.selectedShapeIndex = index;
       this.showForm = true;
-      
+      this.selectedShapeType=shape.type;
+    },
+    changeColor(shape){
+      if(this.selectedColor){
+      if(shape.type==="rectangle"){
+        this.shapes.rectangles[shape.index].fill=this.selectedColor.toLowerCase();
+      }
+      if(shape.type==="circle"){
+        this.shapes.circles[shape.index].fill=this.selectedColor.toLowerCase();
+      }
+      if(shape.type==="ellipse"){
+        this.shapes.ellipses[shape.index].fill=this.selectedColor.toLowerCase();
+      }
+      if(shape.type==="line"){
+        this.shapes.lines[shape.index].fill=this.selectedColor.toLowerCase();
+        if(shape.type==="square"){
+        this.shapes.squares[shape.index].fill=this.selectedColor.toLowerCase();
+      }
+    }
+      }
+      this.selectedColor=null;
     },
     applyResize() {
       if (this.selectedShapeIndex !== null) {
+        if(this.selectedShapeType==="rectangle"){
         if (this.resizeForm.width) {
           this.shapes.rectangles[this.selectedShapeIndex].width = this.resizeForm.width;
         }
-
         if (this.resizeForm.height) {
           this.shapes.rectangles[this.selectedShapeIndex].height = this.resizeForm.height;
         }
         this.showForm = false;
       }
+      if(this.selectedShapeType==="circle"){
+        if (this.resizeForm.width) {
+          this.shapes.circles[this.selectedShapeIndex].radius = this.resizeForm.width;
+        }
+        this.showForm = false;
+      }
+      if(this.selectedShapeType==="square"){
+        if (this.resizeForm.width) {
+          this.shapes.squares[this.selectedShapeIndex].width = this.resizeForm.width;
+          this.shapes.squares[this.selectedShapeIndex].height = this.resizeForm.width;
+        }
+        this.showForm = false;
+      }
+      if(this.selectedShapeType==="ellipse"){
+        if (this.resizeForm.width) {
+          this.shapes.ellipses[this.selectedShapeIndex].radiusX = this.resizeForm.width;
+          this.shapes.ellipses[this.selectedShapeIndex].radiusY = this.resizeForm.height;
+        }
+        this.showForm = false;
+      }
+      this.resizeForm.width=0;
+      this.resizeForm.height=0;
+    }
     },
     newInd(index) {
     this.draggedShapeIndex = index;
   },
   addEllipse() {
-  this.shapes.ellipses.push({
-    index: this.shapes.ellipses.length,
-    id: this.shapeIdCounter++,
-    type:"Ellipse",
-    x: 100,
-    y: 100,
-    radiusX: 70,
-    radiusY: 50,
-    fill: "blue",
-    stroke: "black",
-    strokeWidth: 4,
+    this.shapes.ellipses.push({
+      index: this.shapes.ellipses.length,
+      id: this.shapeIdCounter++,
+      type:"ellipse",
+      x: 100,
+      y: 100,
+      radiusX: 70,
+      radiusY: 50,
+      fill: "blue",
+      stroke: "black",
+      strokeWidth: 4,
   });
 },
 
@@ -249,7 +325,33 @@ export default {
         'Content-Type': 'application/json'
       },
     })
-  }
+  },
+  setColor(color) {
+      this.selectedColor =this.hexToColorNameWithComparison(color);
+    },
+     hexToColorNameWithComparison(hexCode)  {
+      let colorMappings = {
+        '#FF0000': 'Red',
+        '#FF7F00': 'Orange',
+        '#FFFF00': 'Yellow',
+        '#7FFF00': 'Chartreuse',
+        '#00FF00': 'Lime',
+        '#00FF7F': 'Spring Green',
+        '#00FFFF': 'Cyan',
+        '#007FFF': 'Azure',
+        '#0000FF': 'Blue',
+        '#7F00FF': 'Violet',
+        '#FF00FF': 'Magenta',
+        '#FF007F': 'Rose',
+        '#FFFFFF': 'White',
+        '#C0C0C0': 'Silver',
+        '#808080': 'Gray',
+        '#000000': 'Black',
+      };
+
+      let colorName = colorMappings[hexCode.toUpperCase()];
+      return colorName ? colorName : 'Unknown';
+}
   }
 }
 </script>
@@ -277,5 +379,12 @@ button{
 }
 .bts{
   width: 200px;
+}
+.color-square {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #000;
+  cursor: pointer;
+  margin: 5px;
 }
 </style>
