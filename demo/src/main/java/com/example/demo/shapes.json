@@ -1,102 +1,14 @@
-[[
+[[],[],[],[],[
   {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
+    "radius": 50.0,
+    "sides": 3,
+    "fill": "blue",
+    "x": 776.0,
+    "y": 191.0,
+    "id": 1,
+    "index": 0,
+    "type": "triangle",
     "stroke": "black",
-    "strokeWidth": 4,
-    "x": 405.0,
-    "y": 317.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 141.0,
-    "y": 111.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 480.0,
-    "y": 556.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 69.0,
-    "y": 541.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 560.0,
-    "y": 140.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 806.0,
-    "y": 489.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 959.0,
-    "y": 67.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 1140.0,
-    "y": 497.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 1315.0,
-    "y": 137.0,
-    "type": "circle"
-  },
-  {
-    "id": 0,
-    "radius": 250,
-    "fill": "magenta",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 1393.0,
-    "y": 524.0,
-    "type": "circle"
+    "strokeWidth": 4
   }
-],[],[]]
+],[]]

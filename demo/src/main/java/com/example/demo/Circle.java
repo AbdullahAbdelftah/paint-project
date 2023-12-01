@@ -4,54 +4,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Circle extends Shape{
 
-    int id;
-    int radius;
+    float radius;
+
+    String fill;
 
     public Circle() {
     }
 
-    String fill;
-    String stroke;
-    int strokeWidth;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public void setFill(String fill) {
-        this.fill = fill;
-    }
-
-    public void setStroke(String stroke) {
-        this.stroke = stroke;
-    }
-
-    public void setStrokeWidth(int strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getRadius() {
+    public float getRadius() {
         return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     public String getFill() {
         return fill;
     }
 
-    public String getStroke() {
-        return stroke;
-    }
-
-    public int getStrokeWidth() {
-        return strokeWidth;
+    public void setFill(String fill) {
+        this.fill = fill;
     }
 
     @Override

@@ -336,6 +336,33 @@ save(){
     }).catch(err=>{
       console.log(err);
     })
+    fetch('http://localhost:8080/triangles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.triangles)
+    }).catch(err=>{
+      console.log(err);
+    })
+    fetch('http://localhost:8080/ellipses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.ellipses)
+    }).catch(err=>{
+      console.log(err);
+    })
+    fetch('http://localhost:8080/lines', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.shapes.lines)
+    }).catch(err=>{
+      console.log(err);
+    })
     fetch('http://localhost:8080/writeJson', {
       method: 'POST',
       headers: {
@@ -356,11 +383,23 @@ save(){
       }
       //squares
       for(let i=0; i<data[1].length; i++){
-        this.shapes.squares.push(data[0][i]);
+        this.shapes.squares.push(data[1][i]);
       }
       //rectangles
       for(let i=0; i<data[2].length; i++){
-        this.shapes.rectangles.push(data[0][i]);
+        this.shapes.rectangles.push(data[2][i]);
+      }
+      //ellipses
+      for(let i=0; i<data[3].length; i++){
+        this.shapes.ellipses.push(data[3][i]);
+      }
+      //triangles
+      for(let i=0; i<data[4].length; i++){
+        this.shapes.triangles.push(data[4][i]);
+      }
+      //lines
+      for(let i=0; i<data[5].length; i++){
+        this.shapes.lines.push(data[5][i]);
       }
     }).catch(err=>{
       console.log(err);

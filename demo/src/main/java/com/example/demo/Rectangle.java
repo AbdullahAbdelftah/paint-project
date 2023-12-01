@@ -4,43 +4,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class Rectangle extends Shape{
-    int width;
+
 
     public Rectangle() {
     }
 
+
     @Override
     public String toString() {
         return "Rectangle{" +
-                "width=" + width +
+                "id=" + id +
                 ", height=" + height +
+                ", width=" + width +
                 ", fill='" + fill + '\'' +
-                ", stroke='" + stroke + '\'' +
-                ", strokeWidth=" + strokeWidth +
                 ", x=" + x +
                 ", y=" + y +
+                ", index=" + index +
+                ", type='" + type + '\'' +
+                ", stroke='" + stroke + '\'' +
+                ", strokeWidth=" + strokeWidth +
                 '}';
     }
 
-    int height;
-    String fill;
-    String stroke;
-    int strokeWidth;
+    float height;
 
-    public int getWidth() {
-        return width;
-    }
+    float width;
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
     }
 
     public String getFill() {
@@ -51,19 +54,6 @@ public class Rectangle extends Shape{
         this.fill = fill;
     }
 
-    public String getStroke() {
-        return stroke;
-    }
+    String fill;
 
-    public void setStroke(String stroke) {
-        this.stroke = stroke;
-    }
-
-    public int getStrokeWidth() {
-        return strokeWidth;
-    }
-
-    public void setStrokeWidth(int strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
 }
