@@ -213,22 +213,22 @@ export default {
     },
     deleteShape(shape){
       if(shape.type==="ellipse"){
-        this.shapes.ellipses.splice(shape.index, 1);
+        this.shapes.ellipses= this.shapes.ellipses.filter(item => item.id !== shape.id);
       }
       if(shape.type==="square"){
-        this.shapes.squares.splice(shape.index, 1);
+        this.shapes.squares= this.shapes.squares.filter(item => item.id !== shape.id);
       }
       if(shape.type==="rectangle"){
-        this.shapes.rectangles.splice(shape.index, 1);
+        this.shapes.rectangles= this.shapes.rectangles.filter(item => item.id !== shape.id);
       }
       if(shape.type==="circle"){
-        this.shapes.circles.splice(shape.index, 1);
+        this.shapes.circles= this.shapes.circles.filter(item => item.id !== shape.id);
       }
       if(shape.type==="triangle"){
-        this.shapes.triangles.splice(shape.index, 1);
+        this.shapes.triangles= this.shapes.triangles.filter(item => item.id !== shape.id);
       }
       if(shape.type==="line"){
-        this.shapes.lines.splice(shape.index, 1);
+        this.shapes.lines= this.shapes.lines.filter(item => item.id !== shape.id);
       }
     },
     createShape(s){
@@ -269,7 +269,7 @@ export default {
         this.shapes.ellipses[shape.index].fill=this.selectedColor.toLowerCase();
       }
       if(shape.type==="line"){
-        this.shapes.lines[shape.index].fill=this.selectedColor.toLowerCase();
+        this.shapes.lines[shape.index].stroke=this.selectedColor.toLowerCase();
         
     }
     if(shape.type==="square"){
@@ -287,6 +287,7 @@ export default {
       else if(this.deletee){
         this.deleteShape(shape);
         this.deletee=false;
+        console.log(shape);
       }
     },
     applyResize() {
