@@ -1,13 +1,15 @@
 <template>
   <div class="bts">
-    <button class="button-89" role="button" @click="addCircle()"><i class="fa-solid fa-circle"></i></button>
-    <button class="button-89" role="button" @click="addEllipse()">ellipse</button>
-    <button class="button-89" role="button" @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
-    <button class="button-89" role="button" @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
-    <button class="button-89" role="button" @click="addSquare()"><i class="fa-solid fa-square"></i></button>
-    <button class="button-89" role="button" @click="addTriangle()"><i class="fa-solid fa-caret-up"></i></button>
+    <button class="button-89" role="button" @click="createShape(Circle)"><i class="fa-solid fa-circle"></i></button>
+    <button class="button-89" role="button" @click="createShape(Ellipse)">ellipse</button>
+    <button class="button-89" role="button" @click="createShape(Rectangle)"><i class="fa-solid fa-rectangle-list"></i></button>
+    <button class="button-89" role="button" @click="createShape(Line)"><i class="fa-solid fa-grip-lines"></i></button>
+    <button class="button-89" role="button" @click="createShape(Square)"><i class="fa-solid fa-square"></i></button>
+    <button class="button-89" role="button" @click="createShape(Triangle)"><i class="fa-solid fa-caret-up"></i></button>
     <button class="button-89" role="button" @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
     <button class="button-89" role="button" @click="load()"><i class="fa-solid fa-floppy-disk"></i></button>
+    <button :style="{ backgroundColor: copy ? 'green' : '' }" class="button-89" role="button" @click="ChangeToCopy()">COPY</button>
+    <button :style="{ backgroundColor: deletee ? 'red' : '' }" class="button-89" role="button" @click="ChangeToDelete()">Delete</button>
   </div>
   <div class="all">
     <div class="stage">
@@ -63,8 +65,7 @@
 </template>
 
 <script>
-// import { shapes } from 'konva/lib/Shape';
-// import { shapes } from 'konva/lib/Shape';
+
 import { VRegularPolygon } from 'vue-konva';
 
 
@@ -76,6 +77,14 @@ export default {
   },
   data() {
     return {
+      deletee:false,
+      copy:false,
+      Circle:"circle",
+      Ellipse:"ellipse",
+      Square:"square",
+      Line:"line",
+      Triangle:"triangle",
+      Rectangle:"rectangle",
       colorPalette: [
         "#FF0000", "#FF7F00", "#FFFF00", "#7FFF00",
         "#00FF00", "#00FFFF", "#007FFF",
@@ -110,6 +119,139 @@ export default {
     };
   },
   methods: {
+    ChangeToCopy(){
+      this.copy=!this.copy;
+      this.deletee=false;
+    },
+    ChangeToDelete(){
+      this.deletee=!this.deletee;
+      this.copy=false;
+    },
+    copyShape(shape){
+      if(shape.type==="triangle"){
+        this.shapes.triangles.push({
+        index: this.shapes.triangles.length,
+        id: this.shapeIdCounter++,
+        type:"triangle",
+        x: 100,
+        y: 100,
+        sides:3,
+        radius: shape.radius,
+        fill: shape.fill,
+        stroke: shape.stroke,
+        strokeWidth: 4,
+        });
+      }
+      if(shape.type==="square"){
+        this.shapes.squares.push({
+        index: this.shapes.squares.length,
+        id: this.shapeIdCounter++,
+        type:"square",
+        x: 100,
+        y: 100,
+        width:shape.width,
+        height:shape.height,
+        fill: shape.fill,
+        stroke: shape.stroke,
+        strokeWidth: 4,
+    });
+      }
+      if(shape.type==="rectangle"){
+        this.shapes.rectangles.push({
+        index: this.shapes.rectangles.length,
+        id: this.shapeIdCounter++,
+        type:"rectangle",
+        x: 100,
+        y: 100,
+        width:shape.width,
+        height:shape.height,
+        fill: shape.fill,
+        stroke: shape.stroke,
+        strokeWidth: 4,
+      });      
+      }
+      if(shape.type==="line"){
+        this.shapes.lines.push({
+        index: this.shapes.lines.length,
+        type:"line",
+        x: 100,
+        y: 100,
+        points: shape.points,
+        stroke: shape.stroke,
+        strokeWidth: 5,
+      });
+      }
+      if(shape.type==="circle"){
+        this.shapes.circles.push({
+        index: this.shapes.circles.length,
+        id:this.initID++,
+        type:"circle",
+        x: 100,
+        y: 100,
+        radius: shape.radius,
+        fill: shape.fill,
+        stroke: "black",
+        strokeWidth: 4,
+
+      });
+      }
+      if(shape.type==="ellipse"){
+        this.shapes.ellipses.push({
+        index: this.shapes.ellipses.length,
+        id: this.shapeIdCounter++,
+        type:"ellipse",
+        x: 100,
+        y: 100,
+        radiusX: shape.radiusX,
+        radiusY: shape.radiusY,
+        fill: shape.fill,
+        stroke: "black",
+        strokeWidth: 4,
+  });
+      }
+      this.copy=false;
+    },
+    deleteShape(shape){
+      if(shape.type==="ellipse"){
+        this.shapes.ellipses.splice(shape.index, 1);
+      }
+      if(shape.type==="square"){
+        this.shapes.squares.splice(shape.index, 1);
+      }
+      if(shape.type==="rectangle"){
+        this.shapes.rectangles.splice(shape.index, 1);
+      }
+      if(shape.type==="circle"){
+        this.shapes.circles.splice(shape.index, 1);
+      }
+      if(shape.type==="triangle"){
+        this.shapes.triangles.splice(shape.index, 1);
+      }
+      if(shape.type==="line"){
+        this.shapes.lines.splice(shape.index, 1);
+      }
+    },
+    createShape(s){
+      if(s==="triangle"){
+        this.addTriangle();
+      }
+      if(s==="square"){
+        this.addSquare();
+      }
+      if(s==="rectangle"){
+        this.addRectangle();
+      }
+      if(s==="line"){
+        this.addLine();
+      }
+      if(s==="circle"){
+        this.addCircle();
+      }
+      if(s==="ellipse"){
+        this.addEllipse();
+      }
+
+    },
     showResizeForm(index,shape) {
       this.selectedShapeIndex = index;
       this.showForm = true;
@@ -136,8 +278,16 @@ export default {
     if(shape.type==="triangle"){
       this.shapes.triangles[shape.index].fill=this.selectedColor.toLowerCase();
     }
+    this.selectedColor=null;
+  }
+    else if(this.copy){
+        this.copyShape(shape);
+        console.log(this.copy,shape);
       }
-      this.selectedColor=null;
+      else if(this.deletee){
+        this.deleteShape(shape);
+        this.deletee=false;
+      }
     },
     applyResize() {
       if (this.selectedShapeIndex !== null) {
@@ -396,6 +546,7 @@ save(){
       //triangles
       for(let i=0; i<data[4].length; i++){
         this.shapes.triangles.push(data[4][i]);
+        console.log(data[4][i]);
       }
       //lines
       for(let i=0; i<data[5].length; i++){

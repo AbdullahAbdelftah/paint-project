@@ -1,14 +1,81 @@
-[[],[],[],[],[
+[[
+  {
+    "radius": 70.0,
+    "fill": "red",
+    "x": 1311.0,
+    "y": 80.0,
+    "id": 0,
+    "index": 0,
+    "type": "circle",
+    "stroke": "black",
+    "strokeWidth": 4
+  }
+],[
+  {
+    "width": 100.0,
+    "height": 100.0,
+    "fill": "pink",
+    "x": 4.0,
+    "y": 499.0,
+    "id": 3,
+    "index": 0,
+    "type": "square",
+    "stroke": "black",
+    "strokeWidth": 4
+  }
+],[
+  {
+    "height": 60.0,
+    "width": 100.0,
+    "fill": "red",
+    "x": 3.0,
+    "y": 2.0,
+    "id": 2,
+    "index": 0,
+    "type": "rectangle",
+    "stroke": "black",
+    "strokeWidth": 4
+  }
+],[
+  {
+    "radiusX": 70.0,
+    "radiusY": 50.0,
+    "fill": "blue",
+    "x": 1367.0,
+    "y": 567.0,
+    "id": 1,
+    "index": 0,
+    "type": "ellipse",
+    "stroke": "black",
+    "strokeWidth": 4
+  }
+],[
   {
     "radius": 50.0,
     "sides": 3,
     "fill": "blue",
-    "x": 776.0,
-    "y": 191.0,
+    "x": 612.0,
+    "y": 283.0,
     "id": 1,
     "index": 0,
     "type": "triangle",
     "stroke": "black",
     "strokeWidth": 4
   }
-],[]]
+],[
+  {
+    "points": [
+      300.0,
+      300.0,
+      400.0,
+      400.0
+    ],
+    "x": 210.0,
+    "y": -167.0,
+    "id": 0,
+    "index": 0,
+    "type": "line",
+    "stroke": "green",
+    "strokeWidth": 5
+  }
+]]
