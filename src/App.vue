@@ -6,8 +6,9 @@
       <button @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
       <button @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
       <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
+      <button @click="addTriangle()"><i class="fa-solid fa-caret-up"></i></button>
       <button @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
-      <button @click="load()"><i class="fa-solid fa-floppy-disk"></i></button>
+      
       <div>
         <div v-for="(color, index) in colorPalette" :key="index" @click="setColor(color)">
           <div :style="{ backgroundColor: color }" class="color-square"></div>
@@ -26,6 +27,7 @@
           <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL" @dblclick="showResizeForm(index,line)" @click="changeColor(line)"></v-line>
           <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS" @dblclick="showResizeForm(index,sq)" @click="changeColor(sq)"></v-rect>
           <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE" @dblclick="showResizeForm(index,ellipse)" @click="changeColor(ellipse)"></v-ellipse>
+          <v-regular-polygon v-for="triangle in shapes.triangles" :key="triangle.id" :config="triangle"  draggable="true" @dragstart="newInd(triangle.index)" @dragend="drageNewT" @click="changeColor(triangle)"/>
         </v-layer >
       </v-stage>
     </div>
@@ -61,13 +63,14 @@
 
 <script>
 // import { shapes } from 'konva/lib/Shape';
+import { VRegularPolygon } from 'vue-konva';
 
 
 
 export default {
   name: 'App',
   components: {
-    
+    VRegularPolygon
   },
   data() {
     return {
@@ -87,6 +90,7 @@ export default {
         lines: [],
         squares:[],
         ellipses:[],
+        triangles:[]
         
       },
       showForm: false,
@@ -127,6 +131,9 @@ export default {
     if(shape.type==="square"){
         this.shapes.squares[shape.index].fill=this.selectedColor.toLowerCase();
       }
+    if(shape.type==="triangle"){
+      this.shapes.triangles[shape.index].fill=this.selectedColor.toLowerCase();
+    }
       }
       this.selectedColor=null;
     },
@@ -171,6 +178,20 @@ export default {
     newInd(index) {
     this.draggedShapeIndex = index;
   },
+  addTriangle() {
+    this.shapes.triangles.push({
+      index: this.shapes.triangles.length,
+      id: this.shapeIdCounter++,
+      type:"triangle",
+      x: 100,
+      y: 100,
+      sides:3,
+      radius: 50,
+      fill: "blue",
+      stroke: "black",
+      strokeWidth: 4,
+  });
+},
   addEllipse() {
     this.shapes.ellipses.push({
       index: this.shapes.ellipses.length,
@@ -276,6 +297,13 @@ export default {
     this.shapes.ellipses[this.draggedShapeIndex].x = e.target.attrs.x;
     this.shapes.ellipses[this.draggedShapeIndex].y = e.target.attrs.y;
     console.log(this.shapes.ellipses);
+  }
+},
+drageNewT(e) {
+  if (this.draggedShapeIndex !== null) {
+    this.shapes.triangles[this.draggedShapeIndex].x = e.target.attrs.x;
+    this.shapes.triangles[this.draggedShapeIndex].y = e.target.attrs.y;
+    console.log(this.shapes.triangles);
   }
 },
 save(){
