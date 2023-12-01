@@ -64,6 +64,7 @@
 
 <script>
 // import { shapes } from 'konva/lib/Shape';
+// import { shapes } from 'konva/lib/Shape';
 import { VRegularPolygon } from 'vue-konva';
 
 
@@ -349,8 +350,18 @@ save(){
         'Content-Type': 'application/json'
       },
     }).then(res=>res.json()).then(data=>{
-      this.shapes=data;
-      console.log(this.shapes);
+      //circles
+      for(let i=0; i<data[0].length; i++){
+        this.shapes.circles.push(data[0][i]);
+      }
+      //squares
+      for(let i=0; i<data[1].length; i++){
+        this.shapes.squares.push(data[0][i]);
+      }
+      //rectangles
+      for(let i=0; i<data[2].length; i++){
+        this.shapes.rectangles.push(data[0][i]);
+      }
     }).catch(err=>{
       console.log(err);
     })
