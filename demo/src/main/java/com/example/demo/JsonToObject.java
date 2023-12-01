@@ -3,6 +3,8 @@ package com.example.demo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
+
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -71,6 +73,37 @@ public class JsonToObject {
             writer.write(jsonRectangle);
             writer.write("]");
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("/load")
+    public void readJson() {
+        System.out.println("load");
+
+        Gson gson = new Gson();
+        try {
+          FileReader fileReader = new FileReader("src/main/java/com/example/demo/shapes.json");
+            Type listType = new TypeToken<List<Shape>>() {}.getType();
+            List<Shape> allShapes = gson.fromJson(fileReader, listType);
+            circle.clear();
+            square.clear();
+            rectangle.clear();
+            for (Shape shape : allShapes) {
+                if (shape instanceof Circle) {
+                    circle.add((Circle) shape);
+                } else if (shape instanceof Square) {
+                    square.add((Square) shape);
+                } else if (shape instanceof Rectangle) {
+                    rectangle.add((Rectangle) shape);
+                }
+            }
+            fileReader.close();
+            System.out.println("Circles: " + circle);
+            System.out.println("Squares: " + square);
+            System.out.println("Rectangles: " + rectangle);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

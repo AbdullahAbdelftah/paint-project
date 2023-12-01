@@ -1,8 +1,11 @@
 package com.example.demo;
 
 public abstract class Shape {
-    public int x;
-    public int y;
+
+    public Shape() {
+    }
+    public float x;
+    public float y;
 
     public String type;
 

@@ -7,6 +7,7 @@
     <button class="button-89" role="button" @click="addSquare()"><i class="fa-solid fa-square"></i></button>
     <button class="button-89" role="button" @click="addTriangle()"><i class="fa-solid fa-caret-up"></i></button>
     <button class="button-89" role="button" @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
+    <button class="button-89" role="button" @click="load()"><i class="fa-solid fa-floppy-disk"></i></button>
   </div>
   <div class="all">
     <div class="stage">
@@ -339,6 +340,19 @@ save(){
       headers: {
         'Content-Type': 'application/json'
       },
+    })
+  },
+   load(){
+     fetch('http://localhost:8080/load', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then(res=>res.json()).then(data=>{
+      this.shapes=data;
+      console.log(this.shapes);
+    }).catch(err=>{
+      console.log(err);
     })
   },
   async write(){

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Rectangle extends Shape{
     int width;
 
+    public Rectangle() {
+    }
+
     @Override
     public String toString() {
         return "Rectangle{" +

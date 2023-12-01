@@ -2,21 +2,11 @@
   {
     "id": 0,
     "radius": 70,
-    "fill": "blue",
-    "stroke": "black",
-    "strokeWidth": 4,
-    "x": 335,
-    "y": 194,
-    "type": "circle"
-  },
-  {
-    "id": 1,
-    "radius": 70,
     "fill": "red",
     "stroke": "black",
     "strokeWidth": 4,
-    "x": 949,
-    "y": 195,
+    "x": 497.0,
+    "y": 246.0,
     "type": "circle"
   }
 ],[],[]]

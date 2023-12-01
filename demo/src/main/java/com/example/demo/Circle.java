@@ -6,6 +6,10 @@ public class Circle extends Shape{
 
     int id;
     int radius;
+
+    public Circle() {
+    }
+
     String fill;
     String stroke;
     int strokeWidth;

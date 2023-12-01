@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Square extends Shape{
     int width;
     int height;
+
+    public Square() {
+    }
+
     String fill;
     String stroke;
     int strokeWidth;
