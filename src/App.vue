@@ -1,25 +1,25 @@
 <template>
+  <div class="bts">
+    <button class="button-89" role="button" @click="addCircle()"><i class="fa-solid fa-circle"></i></button>
+    <button class="button-89" role="button" @click="addEllipse()">ellipse</button>
+    <button class="button-89" role="button" @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
+    <button class="button-89" role="button" @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
+    <button class="button-89" role="button" @click="addSquare()"><i class="fa-solid fa-square"></i></button>
+    <button class="button-89" role="button" @click="addTriangle()"><i class="fa-solid fa-caret-up"></i></button>
+    <button class="button-89" role="button" @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
+  </div>
   <div class="all">
-    <div class="bts">
-      <button @click="addCircle()"><i class="fa-solid fa-circle"></i></button>
-      <button @click="addEllipse()">ellipse</button>
-      <button @click="addRectangle()"><i class="fa-solid fa-rectangle-list"></i></button>
-      <button @click="addLine()"><i class="fa-solid fa-grip-lines"></i></button>
-      <button @click="addSquare()"><i class="fa-solid fa-square"></i></button>
-      <button @click="addTriangle()"><i class="fa-solid fa-caret-up"></i></button>
-      <button @click="save()"><i class="fa-solid fa-floppy-disk"></i></button>
-      
-      <div>
-        <div v-for="(color, index) in colorPalette" :key="index" @click="setColor(color)">
-          <div :style="{ backgroundColor: color }" class="color-square"></div>
+    <div class="stage">
+      <div class="clrs">
+        <div class="colors">
+          <div v-for="(color, index) in colorPalette" :key="index" @click="setColor(color)">
+            <div :style="{ backgroundColor: color }" class="color-square"></div>
+          </div>
         </div>
         <div>
           Selected Color: {{ selectedColor }}
         </div>
       </div>
-      
-    </div>
-    <div class="stage">
       <v-stage :config="configKonva">
         <v-layer>
           <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew" @dblclick="showResizeForm(index,circle)" @click="changeColor(circle)"></v-circle>
@@ -386,22 +386,40 @@ save(){
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
+  
 }
-.all{
+body{
+  background-image: url("vecteezy_simple-childish-scribble-backdrop-colorful-doodle-art_8362482.jpg");
+}
+.all {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stage {
+  border: #2c3e50 1px solid;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
 }
 
 .stage{
   border: #2c3e50 1px solid;
-  
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items:center ;
 }
 button{
-  width: 50px;
+  width: 100px;
   height: 50px;
 }
 .bts{
-  width: 200px;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
 }
 .color-square {
   width: 10px;
@@ -409,5 +427,52 @@ button{
   border: 1px solid #000;
   cursor: pointer;
   margin: 5px;
+}
+.clrs{
+  display: flex;
+  flex-flow: column wrap;
+  border: #000 1px solid;
+}
+.stage{
+  background-color: white;
+}
+
+.button-89 {
+  --b: 3px;  
+  --s: .45em;
+  --color: #373B44;
+  
+  padding: calc(.5em + var(--s)) calc(.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0)
+    var(--_p) var(--_p)/calc(100% - 2*var(--_p)) calc(100% - 2*var(--_p)); /* Modified this line */
+  transition: .3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #0000;
+  outline-offset: .6em;
+  font-size: 16px;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+
+.button-89:hover,
+.button-89:focus-visible{
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: .05em;
+}
+
+.button-89:active {
+  background: var(--color);
+  color: #fff;
+}
+.colors{
+  display: flex;
 }
 </style>
