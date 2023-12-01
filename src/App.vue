@@ -343,7 +343,7 @@ save(){
     })
   },
    load(){
-     fetch('http://localhost:8080/load', {
+     fetch('http://localhost:8080/readJson', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -58,7 +59,6 @@ public class JsonToObject {
 
     @PostMapping("/writeJson")
     public void writeJson() {
-        System.out.println("talk");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonCircle = gson.toJson(circle);
         String jsonSquare = gson.toJson(square);
@@ -78,34 +78,25 @@ public class JsonToObject {
         }
     }
 
-    @PostMapping("/load")
-    public void readJson() {
-        System.out.println("load");
-
-        Gson gson = new Gson();
+    @PostMapping("/readJson")
+    public String readJson() {
         try {
-          FileReader fileReader = new FileReader("src/main/java/com/example/demo/shapes.json");
-            Type listType = new TypeToken<List<Shape>>() {}.getType();
-            List<Shape> allShapes = gson.fromJson(fileReader, listType);
-            circle.clear();
-            square.clear();
-            rectangle.clear();
-            for (Shape shape : allShapes) {
-                if (shape instanceof Circle) {
-                    circle.add((Circle) shape);
-                } else if (shape instanceof Square) {
-                    square.add((Square) shape);
-                } else if (shape instanceof Rectangle) {
-                    rectangle.add((Rectangle) shape);
-                }
+            FileReader fileReader = new FileReader("src/main/java/com/example/demo/shapes.json");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuilder jsonStringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                jsonStringBuilder.append(line);
             }
+            String jsonString = jsonStringBuilder.toString();
+            System.out.println("JSON Content: " + jsonString);
+            bufferedReader.close();
             fileReader.close();
-            System.out.println("Circles: " + circle);
-            System.out.println("Squares: " + square);
-            System.out.println("Rectangles: " + rectangle);
-
+            return jsonString;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
+
 }
