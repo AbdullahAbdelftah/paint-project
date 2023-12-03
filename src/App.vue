@@ -638,7 +638,7 @@ export default {
       }).catch((err) => {
         console.log(err);
       });
-      fetch("http://localhost:8080/writeJson", {
+      fetch("http://localhost:8080/write", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

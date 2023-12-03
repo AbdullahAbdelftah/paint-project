@@ -100,6 +100,7 @@ public class JsonToObject {
     @PostMapping("/write")
     public void save(@RequestBody String path) throws JAXBException {
         path = path.replaceAll("\"", "");
+        System.out.println(path);
         if (path.charAt(path.length() - 1) == 'n'){
             writeJson(path);
         }
