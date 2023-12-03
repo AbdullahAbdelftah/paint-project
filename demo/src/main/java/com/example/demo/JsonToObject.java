@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Result;
+
 @CrossOrigin(origins = "*")
 @RestController
 
@@ -26,6 +29,7 @@ public class JsonToObject {
     public static List<Ellipse> ellipse=new ArrayList<>();
     public static List<Triangle> triangle=new ArrayList<>();
     public static List<Line> line=new ArrayList<>();
+    public static List<Shape> shapes=new ArrayList<>();
     @PostMapping("/circles")
     public void circles(@RequestBody String circles) {
         circles = circles.replaceAll("\"", "");
@@ -144,6 +148,21 @@ public class JsonToObject {
             e.printStackTrace();
             return null;
         }
+    }
+    @PostMapping("/writeXML")
+    public void writeXML(String path) throws JAXBException {
+        shapes.addAll(circle);
+        shapes.addAll(square);
+        shapes.addAll(rectangle);
+        shapes.addAll(ellipse);
+        shapes.addAll(triangle);
+        shapes.addAll(line);
+        ToXML xml = new ToXML(shapes);
+        JAXBContext jaxbContext = JAXBContext.newInstance(ToXML.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        File file = new File(path);
+        marshaller.marshal(xml, file);
     }
 
 }
