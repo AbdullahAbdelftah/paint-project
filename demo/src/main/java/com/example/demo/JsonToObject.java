@@ -97,8 +97,30 @@ public class JsonToObject {
         }
     }
 
-    @PostMapping("/writeJson")
-    public void writeJson(@RequestBody String path) {
+    @PostMapping("/write")
+    public void save(@RequestBody String path) throws JAXBException {
+        if (path.charAt(path.length() - 1) == 'n'){
+            writeJson(path);
+        }
+        else{
+            writeXML(path);
+        }
+    }
+    public void writeXML(String path) throws JAXBException {
+        shapes.addAll(circle);
+        shapes.addAll(square);
+        shapes.addAll(rectangle);
+        shapes.addAll(ellipse);
+        shapes.addAll(triangle);
+        shapes.addAll(line);
+        ToXML xml = new ToXML(shapes);
+        JAXBContext jaxbContext = JAXBContext.newInstance(ToXML.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        File file = new File(path);
+        marshaller.marshal(xml, file);
+    }
+    public void writeJson(String path) {
         path = path.replaceAll("\"", "");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonCircle = gson.toJson(circle);
@@ -149,20 +171,6 @@ public class JsonToObject {
             return null;
         }
     }
-    @PostMapping("/writeXML")
-    public void writeXML(String path) throws JAXBException {
-        shapes.addAll(circle);
-        shapes.addAll(square);
-        shapes.addAll(rectangle);
-        shapes.addAll(ellipse);
-        shapes.addAll(triangle);
-        shapes.addAll(line);
-        ToXML xml = new ToXML(shapes);
-        JAXBContext jaxbContext = JAXBContext.newInstance(ToXML.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        File file = new File(path);
-        marshaller.marshal(xml, file);
-    }
+
 
 }
