@@ -94,7 +94,8 @@ public class JsonToObject {
     }
 
     @PostMapping("/writeJson")
-    public void writeJson() {
+    public void writeJson(@RequestBody String path) {
+        path = path.replaceAll("\"", "");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonCircle = gson.toJson(circle);
         String jsonSquare = gson.toJson(square);
@@ -103,7 +104,7 @@ public class JsonToObject {
         String jsonTriangle = gson.toJson(triangle);
         String jsonLine = gson.toJson(line);
         try {
-            FileWriter writer = new FileWriter("src/main/java/com/example/demo/shapes.json");
+            FileWriter writer = new FileWriter(path);
             writer.write("[");
             writer.write(jsonCircle);
             writer.write(",");
@@ -124,9 +125,10 @@ public class JsonToObject {
     }
 
     @PostMapping("/readJson")
-    public String readJson() {
+    public String readJson(@RequestBody String path) {
+        path = path.replaceAll("\"", "");
         try {
-            FileReader fileReader = new FileReader("src/main/java/com/example/demo/shapes.json");
+            FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuilder jsonStringBuilder = new StringBuilder();
             String line;
