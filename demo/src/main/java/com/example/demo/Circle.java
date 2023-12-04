@@ -1,26 +1,22 @@
 package com.example.demo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
 
+import javax.xml.bind.annotation.XmlType;
+
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@XmlType(propOrder = {"radius","fill","x","y","id","index","type","stroke","strokeWidth"})
 public class Circle extends Shape{
 
-    float radius;
-
-    String fill;
+    private float radius;
+    private String fill;
 
     public Circle() {
     }
 
-    public float getRadius() {
-        return radius;
-    }
-
     public void setRadius(float radius) {
         this.radius = radius;
-    }
-
-    public String getFill() {
-        return fill;
     }
 
     public void setFill(String fill) {
@@ -30,13 +26,13 @@ public class Circle extends Shape{
     @Override
     public String toString() {
         return "Circle{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", radius=" + radius +
                 ", fill='" + fill + '\'' +
-                ", stroke='" + stroke + '\'' +
-                ", strokeWidth=" + strokeWidth +
-                ", x=" + x +
-                ", y=" + y +
+                ", stroke='" + getStroke() + '\'' +
+                ", strokeWidth=" + getStrokeWidth() +
+                ", x=" + getX() +
+                ", y=" + getY() +
                 '}';
     }
 }

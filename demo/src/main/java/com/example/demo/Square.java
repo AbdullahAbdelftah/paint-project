@@ -1,31 +1,23 @@
 package com.example.demo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
 
+import javax.xml.bind.annotation.XmlType;
+
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-
+@XmlType(propOrder = {"height","width","fill","x","y","id","index","type","stroke","strokeWidth"})
 public class Square extends Shape{
-    float width;
-    float height;
-    String fill;
-
-    public float getWidth() {
-        return width;
-    }
+    private float width;
+    private float height;
+    private String fill;
 
     public void setWidth(float width) {
         this.width = width;
     }
 
-    public float getHeight() {
-        return height;
-    }
-
     public void setHeight(float height) {
         this.height = height;
-    }
-
-    public String getFill() {
-        return fill;
     }
 
     public void setFill(String fill) {
@@ -43,10 +35,10 @@ public class Square extends Shape{
                 "width=" + width +
                 ", height=" + height +
                 ", fill='" + fill + '\'' +
-                ", stroke='" + stroke + '\'' +
-                ", strokeWidth=" + strokeWidth +
-                ", x=" + x +
-                ", y=" + y +
+                ", stroke='" + getStroke() + '\'' +
+                ", strokeWidth=" + getStrokeWidth() +
+                ", x=" + getX() +
+                ", y=" + getY() +
                 '}';
     }
 

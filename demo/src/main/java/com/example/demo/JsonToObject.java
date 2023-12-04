@@ -1,14 +1,26 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +41,6 @@ public class JsonToObject {
     public static List<Ellipse> ellipse=new ArrayList<>();
     public static List<Triangle> triangle=new ArrayList<>();
     public static List<Line> line=new ArrayList<>();
-    public static List<Shape> shapes=new ArrayList<>();
     @PostMapping("/circles")
     public void circles(@RequestBody String circles) {
         circles = circles.replaceAll("\"", "");
@@ -100,22 +111,17 @@ public class JsonToObject {
     @PostMapping("/write")
     public void save(@RequestBody String path) throws JAXBException {
         path = path.replaceAll("\"", "");
-        System.out.println(path);
         if (path.charAt(path.length() - 1) == 'n'){
             writeJson(path);
         }
         else{
-            writeXML(path);
+           writeXML(path);
         }
     }
     public void writeXML(String path) throws JAXBException {
-        shapes.addAll(circle);
-        shapes.addAll(square);
-        shapes.addAll(rectangle);
-        shapes.addAll(ellipse);
-        shapes.addAll(triangle);
-        shapes.addAll(line);
-        ToXML xml = new ToXML(shapes);
+        ToXML xml = new ToXML((ArrayList<Circle>) circle, (ArrayList<Square>) square,
+                (ArrayList<Rectangle>) rectangle, (ArrayList<Ellipse>) ellipse,
+                (ArrayList<Triangle>) triangle, (ArrayList<Line>) line);
         JAXBContext jaxbContext = JAXBContext.newInstance(ToXML.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -153,7 +159,16 @@ public class JsonToObject {
     }
 
     @PostMapping("/readJson")
-    public String readJson(@RequestBody String path) {
+    public String load(@RequestBody String path){
+        path = path.replaceAll("\"", "");
+        if(path.charAt(path.length()-1)=='n'){
+            return readJson(path);
+        }
+        else{
+            return readXML(path);
+        }
+    }
+    public String readJson(String path) {
         path = path.replaceAll("\"", "");
         try {
             FileReader fileReader = new FileReader(path);
@@ -173,6 +188,29 @@ public class JsonToObject {
             return null;
         }
     }
-
-
+    public String readXML(String path) {
+        path = path.replaceAll("\"", "");
+        try {
+            String xmlContent = new String(Files.readAllBytes(Paths.get(path)));
+            ObjectMapper xmlMapper = new XmlMapper();
+            JsonNode jsonNode = xmlMapper.readTree(xmlContent);
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode orderedJsonNode = objectMapper.createObjectNode();
+            orderedJsonNode.setAll((ObjectNode) jsonNode);
+            String jsonString = orderedJsonNode.toString();
+            jsonString= jsonString.replaceAll("\\{\"circle\":", "[");
+            jsonString= jsonString.replaceAll("\"square\":", "");
+            jsonString= jsonString.replaceAll("\"triangle\":", "");
+            jsonString= jsonString.replaceAll("\"rectangle\":", "");
+            jsonString= jsonString.replaceAll("\"ellipse\":", "");
+            jsonString= jsonString.replaceAll("\"line\":", "");
+            jsonString= jsonString.substring(0, jsonString.length()-1);
+            jsonString= jsonString.concat("]");
+            System.out.println(jsonString);
+            return jsonString;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
