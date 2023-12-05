@@ -86,6 +86,13 @@
     >
       Delete
     </button>
+    <button
+      class="button-89"
+      role="button"
+      @click="clear"
+    >
+      clear
+    </button>
   </div>
   <div class="all">
     <div class="stage">
@@ -723,6 +730,7 @@ export default {
       })
         .then((res) => res.json())
         .then((data) => {
+          this.clear() ;
           if (filePath.includes("json")) {
             //circles
             for (let i = 0; i < data[0].length; i++) {
@@ -834,6 +842,8 @@ export default {
               }
             }
           }
+          this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+        this.redostack = [];
         })
         .catch((err) => {
           console.log(err);
@@ -1015,6 +1025,18 @@ export default {
         }
       }
     },
+    clear(){
+      this.shapes={
+        rectangles: [],
+        circles: [],
+        lines: [],
+        squares: [],
+        ellipses: [],
+        triangles: [],
+      } ;
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    }
   },
 };
 </script>
