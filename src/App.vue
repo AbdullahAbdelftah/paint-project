@@ -948,9 +948,9 @@ export default {
     mouseuphandler() {
       if (this.drawing != "none") {
         this.drawing = "none";
+        this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+        this.redostack = [];
       }
-      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack = [];
       this.isdrawing = false;
     },
     mousemovehandler() {
