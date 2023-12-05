@@ -203,50 +203,56 @@
 </template>
 
 <script>
-
-import { VRegularPolygon , VStage } from 'vue-konva';
-
-
+import { VRegularPolygon, VStage } from "vue-konva";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    VRegularPolygon ,
-    VStage ,
+    VRegularPolygon,
+    VStage,
   },
   data() {
     return {
-      isdrawing:false,
-      drawing:"none",
-      stageKey:0,
+      isdrawing: false,
+      drawing: "none",
+      stageKey: 0,
       getPath: "",
       filePath: "",
-      deletee:false,
-      copy:false,
-      Circle:"circle",
-      Ellipse:"ellipse",
-      Square:"square",
-      Line:"line",
-      Triangle:"triangle",
-      Rectangle:"rectangle",
+      deletee: false,
+      copy: false,
+      Circle: "circle",
+      Ellipse: "ellipse",
+      Square: "square",
+      Line: "line",
+      Triangle: "triangle",
+      Rectangle: "rectangle",
       colorPalette: [
-        "#FF0000", "#FF7F00", "#FFFF00", "#7FFF00",
-        "#00FF00", "#00FFFF", "#007FFF",
-        "#0000FF", "#7F00FF", "#FF00FF",
-        "#FFFFFF", "#C0C0C0", "#808080", "#000000"
+        "#FF0000",
+        "#FF7F00",
+        "#FFFF00",
+        "#7FFF00",
+        "#00FF00",
+        "#00FFFF",
+        "#007FFF",
+        "#0000FF",
+        "#7F00FF",
+        "#FF00FF",
+        "#FFFFFF",
+        "#C0C0C0",
+        "#808080",
+        "#000000",
       ],
       selectedColor: null,
       draggedShapeIndex: null,
-      ind:null,
-      initID:0,
+      ind: null,
+      initID: 0,
       shapes: {
-        rectangles:[],
+        rectangles: [],
         circles: [],
         lines: [],
-        squares:[],
-        ellipses:[],
-        triangles:[]
-        
+        squares: [],
+        ellipses: [],
+        triangles: [],
       },
       showForm: false,
       selectedShapeIndex: null,
@@ -258,342 +264,383 @@ export default {
       shapeIdCounter: 1,
       configKonva: {
         width: 1400,
-        height: 600
+        height: 600,
       },
-      undostack:[{
-        rectangles:[],
-        circles: [],
-        lines: [],
-        squares:[],
-        ellipses:[],
-        triangles:[]
-        
-      }],
-      redostack:[],
+      undostack: [
+        {
+          rectangles: [],
+          circles: [],
+          lines: [],
+          squares: [],
+          ellipses: [],
+          triangles: [],
+        },
+      ],
+      redostack: [],
     };
   },
   methods: {
-    ChangeToCopy(){
-      this.copy=!this.copy;
-      this.deletee=false;
+    ChangeToCopy() {
+      this.copy = !this.copy;
+      this.deletee = false;
     },
-    ChangeToDelete(){
-      this.deletee=!this.deletee;
-      this.copy=false;
+    ChangeToDelete() {
+      this.deletee = !this.deletee;
+      this.copy = false;
     },
-    copyShape(shape){
-      if(shape.type==="triangle"){
+    copyShape(shape) {
+      if (shape.type === "triangle") {
         this.shapes.triangles.push({
-        index: this.shapes.triangles.length,
-        id: this.shapeIdCounter++,
-        type:"triangle",
-        x: 100,
-        y: 100,
-        sides:3,
-        radius: shape.radius,
-        fill: shape.fill,
-        stroke: shape.stroke,
-        strokeWidth: 4,
+          index: this.shapes.triangles.length,
+          id: this.shapeIdCounter++,
+          type: "triangle",
+          x: 100,
+          y: 100,
+          sides: 3,
+          radius: shape.radius,
+          fill: shape.fill,
+          stroke: shape.stroke,
+          strokeWidth: 4,
         });
       }
-      if(shape.type==="square"){
+      if (shape.type === "square") {
         this.shapes.squares.push({
-        index: this.shapes.squares.length,
-        id: this.shapeIdCounter++,
-        type:"square",
-        x: 100,
-        y: 100,
-        width:shape.width,
-        height:shape.height,
-        fill: shape.fill,
-        stroke: shape.stroke,
-        strokeWidth: 4,
-    });
+          index: this.shapes.squares.length,
+          id: this.shapeIdCounter++,
+          type: "square",
+          x: 100,
+          y: 100,
+          width: shape.width,
+          height: shape.height,
+          fill: shape.fill,
+          stroke: shape.stroke,
+          strokeWidth: 4,
+        });
       }
-      if(shape.type==="rectangle"){
+      if (shape.type === "rectangle") {
         this.shapes.rectangles.push({
-        index: this.shapes.rectangles.length,
-        id: this.shapeIdCounter++,
-        type:"rectangle",
-        x: 100,
-        y: 100,
-        width:shape.width,
-        height:shape.height,
-        fill: shape.fill,
-        stroke: shape.stroke,
-        strokeWidth: 4,
-      });      
+          index: this.shapes.rectangles.length,
+          id: this.shapeIdCounter++,
+          type: "rectangle",
+          x: 100,
+          y: 100,
+          width: shape.width,
+          height: shape.height,
+          fill: shape.fill,
+          stroke: shape.stroke,
+          strokeWidth: 4,
+        });
       }
-      if(shape.type==="line"){
+      if (shape.type === "line") {
         this.shapes.lines.push({
-        index: this.shapes.lines.length,
-        type:"line",
-        x: 100,
-        y: 100,
-        points: shape.points,
-        stroke: shape.stroke,
-        strokeWidth: 5,
-      });
+          index: this.shapes.lines.length,
+          type: "line",
+          x: 100,
+          y: 100,
+          points: shape.points,
+          stroke: shape.stroke,
+          strokeWidth: 5,
+        });
       }
-      if(shape.type==="circle"){
+      if (shape.type === "circle") {
         this.shapes.circles.push({
-        index: this.shapes.circles.length,
-        id:this.initID++,
-        type:"circle",
-        x: 100,
-        y: 100,
-        radius: shape.radius,
-        fill: shape.fill,
-        stroke: "black",
-        strokeWidth: 4,
-
-      });
+          index: this.shapes.circles.length,
+          id: this.initID++,
+          type: "circle",
+          x: 100,
+          y: 100,
+          radius: shape.radius,
+          fill: shape.fill,
+          stroke: "black",
+          strokeWidth: 4,
+        });
       }
-      if(shape.type==="ellipse"){
+      if (shape.type === "ellipse") {
         this.shapes.ellipses.push({
-        index: this.shapes.ellipses.length,
-        id: this.shapeIdCounter++,
-        type:"ellipse",
-        x: 100,
-        y: 100,
-        radiusX: shape.radiusX,
-        radiusY: shape.radiusY,
-        fill: shape.fill,
-        stroke: "black",
-        strokeWidth: 4,
-  });
+          index: this.shapes.ellipses.length,
+          id: this.shapeIdCounter++,
+          type: "ellipse",
+          x: 100,
+          y: 100,
+          radiusX: shape.radiusX,
+          radiusY: shape.radiusY,
+          fill: shape.fill,
+          stroke: "black",
+          strokeWidth: 4,
+        });
       }
-      this.copy=false;
+      this.copy = false;
       this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack=[] ;
+      this.redostack = [];
     },
-    deleteShape(shape){
-      if(shape.type==="ellipse"){
-        this.shapes.ellipses= this.shapes.ellipses.filter(item => item.id !== shape.id);
+    deleteShape(shape) {
+      if (shape.type === "ellipse") {
+        this.shapes.ellipses = this.shapes.ellipses.filter(
+          (item) => item.id !== shape.id
+        );
       }
-      if(shape.type==="square"){
-        this.shapes.squares= this.shapes.squares.filter(item => item.id !== shape.id);
+      if (shape.type === "square") {
+        this.shapes.squares = this.shapes.squares.filter(
+          (item) => item.id !== shape.id
+        );
       }
-      if(shape.type==="rectangle"){
-        this.shapes.rectangles= this.shapes.rectangles.filter(item => item.id !== shape.id);
+      if (shape.type === "rectangle") {
+        this.shapes.rectangles = this.shapes.rectangles.filter(
+          (item) => item.id !== shape.id
+        );
       }
-      if(shape.type==="circle"){
-        this.shapes.circles= this.shapes.circles.filter(item => item.id !== shape.id);
+      if (shape.type === "circle") {
+        this.shapes.circles = this.shapes.circles.filter(
+          (item) => item.id !== shape.id
+        );
       }
-      if(shape.type==="triangle"){
-        this.shapes.triangles= this.shapes.triangles.filter(item => item.id !== shape.id);
+      if (shape.type === "triangle") {
+        this.shapes.triangles = this.shapes.triangles.filter(
+          (item) => item.id !== shape.id
+        );
       }
-      if(shape.type==="line"){
-        this.shapes.lines= this.shapes.lines.filter(item => item.id !== shape.id);
+      if (shape.type === "line") {
+        this.shapes.lines = this.shapes.lines.filter(
+          (item) => item.id !== shape.id
+        );
       }
       this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack=[] ;
+      this.redostack = [];
     },
-    createShape(s){
-      if(s==="triangle"){
+    createShape(s) {
+      if (s === "triangle") {
         this.addTriangle();
       }
-      if(s==="square"){
+      if (s === "square") {
         this.addSquare();
       }
-      if(s==="rectangle"){
+      if (s === "rectangle") {
         this.addRectangle();
       }
-      if(s==="line"){
+      if (s === "line") {
         this.addLine();
       }
-      if(s==="circle"){
+      if (s === "circle") {
         this.addCircle();
       }
-      if(s==="ellipse"){
+      if (s === "ellipse") {
         this.addEllipse();
       }
-
     },
-    showResizeForm(index,shape) {
+    showResizeForm(index, shape) {
       this.selectedShapeIndex = index;
       this.showForm = true;
-      this.selectedShapeType=shape.type;
+      this.selectedShapeType = shape.type;
     },
-    changeColor(shape){
-      if(this.selectedColor){
-      if(shape.type==="rectangle"){
-        if(this.shapes.rectangles[shape.index].fill!=this.selectedColor.toLowerCase()){
-        this.shapes.rectangles[shape.index].fill=this.selectedColor.toLowerCase();
+    changeColor(shape) {
+      if (this.selectedColor) {
+        if (shape.type === "rectangle") {
+          if (
+            this.shapes.rectangles[shape.index].fill !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.rectangles[shape.index].fill =
+              this.selectedColor.toLowerCase();
+          }
         }
-      }
-      if(shape.type==="circle"){
-        if(this.shapes.circles[shape.index].fill!=this.selectedColor.toLowerCase()){
-        this.shapes.circles[shape.index].fill=this.selectedColor.toLowerCase();
+        if (shape.type === "circle") {
+          if (
+            this.shapes.circles[shape.index].fill !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.circles[shape.index].fill =
+              this.selectedColor.toLowerCase();
+          }
         }
-      }
-      if(shape.type==="ellipse"){
-        if(this.shapes.ellipses[shape.index].fill!=this.selectedColor.toLowerCase()){
-        this.shapes.ellipses[shape.index].fill=this.selectedColor.toLowerCase();
+        if (shape.type === "ellipse") {
+          if (
+            this.shapes.ellipses[shape.index].fill !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.ellipses[shape.index].fill =
+              this.selectedColor.toLowerCase();
+          }
         }
-      }
-      if(shape.type==="line"){
-        if(this.shapes.lines[shape.index].stroke!=this.selectedColor.toLowerCase()){
-        this.shapes.lines[shape.index].stroke=this.selectedColor.toLowerCase();
+        if (shape.type === "line") {
+          if (
+            this.shapes.lines[shape.index].stroke !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.lines[shape.index].stroke =
+              this.selectedColor.toLowerCase();
+          }
         }
-    }
-    if(shape.type==="square"){
-      if(this.shapes.squares[shape.index].fill!=this.selectedColor.toLowerCase()){
-        this.shapes.squares[shape.index].fill=this.selectedColor.toLowerCase();
-      }
-      }
-    if(shape.type==="triangle"){
-      if(this.shapes.triangles[shape.index].fill!=this.selectedColor.toLowerCase()){
-      this.shapes.triangles[shape.index].fill=this.selectedColor.toLowerCase();
-      }
-    }
-    this.selectedColor=null;
-    this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack=[] ;
-  }
-    else if(this.copy){
+        if (shape.type === "square") {
+          if (
+            this.shapes.squares[shape.index].fill !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.squares[shape.index].fill =
+              this.selectedColor.toLowerCase();
+          }
+        }
+        if (shape.type === "triangle") {
+          if (
+            this.shapes.triangles[shape.index].fill !=
+            this.selectedColor.toLowerCase()
+          ) {
+            this.shapes.triangles[shape.index].fill =
+              this.selectedColor.toLowerCase();
+          }
+        }
+        this.selectedColor = null;
+        this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+        this.redostack = [];
+      } else if (this.copy) {
         this.copyShape(shape);
-        console.log(this.copy,shape);
-      }
-      else if(this.deletee){
+        console.log(this.copy, shape);
+      } else if (this.deletee) {
         this.deleteShape(shape);
-        this.deletee=false;
+        this.deletee = false;
         console.log(shape);
       }
     },
     applyResize() {
       if (this.selectedShapeIndex !== null) {
-        if(this.selectedShapeType==="rectangle"){
-        if (this.resizeForm.width) {
-          this.shapes.rectangles[this.selectedShapeIndex].width = this.resizeForm.width;
+        if (this.selectedShapeType === "rectangle") {
+          if (this.resizeForm.width) {
+            this.shapes.rectangles[this.selectedShapeIndex].width =
+              this.resizeForm.width;
+          }
+          if (this.resizeForm.height) {
+            this.shapes.rectangles[this.selectedShapeIndex].height =
+              this.resizeForm.height;
+          }
+          this.showForm = false;
         }
-        if (this.resizeForm.height) {
-          this.shapes.rectangles[this.selectedShapeIndex].height = this.resizeForm.height;
+        if (this.selectedShapeType === "circle") {
+          if (this.resizeForm.width) {
+            this.shapes.circles[this.selectedShapeIndex].radius =
+              this.resizeForm.width;
+          }
+          this.showForm = false;
         }
-        this.showForm = false;
-      }
-      if(this.selectedShapeType==="circle"){
-        if (this.resizeForm.width) {
-          this.shapes.circles[this.selectedShapeIndex].radius = this.resizeForm.width;
+        if (this.selectedShapeType === "square") {
+          if (this.resizeForm.width) {
+            this.shapes.squares[this.selectedShapeIndex].width =
+              this.resizeForm.width;
+            this.shapes.squares[this.selectedShapeIndex].height =
+              this.resizeForm.width;
+          }
+          this.showForm = false;
         }
-        this.showForm = false;
-      }
-      if(this.selectedShapeType==="square"){
-        if (this.resizeForm.width) {
-          this.shapes.squares[this.selectedShapeIndex].width = this.resizeForm.width;
-          this.shapes.squares[this.selectedShapeIndex].height = this.resizeForm.width;
+        if (this.selectedShapeType === "ellipse") {
+          if (this.resizeForm.width) {
+            this.shapes.ellipses[this.selectedShapeIndex].radiusX =
+              this.resizeForm.width;
+          }
+          if (this.resizeForm.height) {
+            this.shapes.ellipses[this.selectedShapeIndex].radiusY =
+              this.resizeForm.height;
+          }
+          this.showForm = false;
         }
-        this.showForm = false;
-      }
-      if(this.selectedShapeType==="ellipse"){
-        if (this.resizeForm.width) {
-          this.shapes.ellipses[this.selectedShapeIndex].radiusX = this.resizeForm.width;
-          
-        }
-        if(this.resizeForm.height){
-          this.shapes.ellipses[this.selectedShapeIndex].radiusY = this.resizeForm.height;
-        }
-        this.showForm = false;
-      }
-      this.resizeForm.width=0;
-      this.resizeForm.height=0;
-      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack=[] ;
+        this.resizeForm.width = 0;
+        this.resizeForm.height = 0;
+        this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+        this.redostack = [];
       }
     },
     newInd(index) {
-    this.draggedShapeIndex = index;
-  },
-  addTriangle() {
-    this.drawing = "triangle"
-},
-  addEllipse() {
-    this.drawing = "ellipse" ;
-},
+      this.draggedShapeIndex = index;
+    },
+    addTriangle() {
+      this.drawing = "triangle";
+    },
+    addEllipse() {
+      this.drawing = "ellipse";
+    },
 
     addRectangle() {
-      this.drawing = "rectangle" ;
+      this.drawing = "rectangle";
     },
     addCircle() {
-      this.drawing = "circle" ;
+      this.drawing = "circle";
     },
     addLine() {
-      this.drawing = "line" ;
+      this.drawing = "line";
     },
     addSquare() {
-      this.drawing = "square"
-
-},
+      this.drawing = "square";
+    },
     drageNew(e) {
-    if (this.draggedShapeIndex !== null) {
-      this.shapes.circles[this.draggedShapeIndex].x = e.target.attrs.x;
-      this.shapes.circles[this.draggedShapeIndex].y = e.target.attrs.y;
-      console.log(this.shapes.circles);
-    }
-    this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-    this.redostack=[] ;
-  },
-  drageNewR(e) {
-    if (this.draggedShapeIndex !== null) {
-      this.shapes.rectangles[this.draggedShapeIndex].x = e.target.attrs.x;
-      this.shapes.rectangles[this.draggedShapeIndex].y = e.target.attrs.y;
-      console.log(this.shapes.rectangles);
-    }
-    this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-    this.redostack=[] ;
-  },
-  drageNewL(e) {
-    if (this.draggedShapeIndex !== null) {
-      this.shapes.lines[this.draggedShapeIndex].x = e.target.attrs.x;
-      this.shapes.lines[this.draggedShapeIndex].y = e.target.attrs.y;
-      console.log(this.shapes.lines);
-    }
-    this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-    this.redostack=[] ;
-  },
-  drageNewS(e) {
-    if (this.draggedShapeIndex !== null) {
-      this.shapes.squares[this.draggedShapeIndex].x = e.target.attrs.x;
-      this.shapes.squares[this.draggedShapeIndex].y = e.target.attrs.y;
-      console.log(JSON.stringify(this.shapes.squares));
-    }
-    this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-    this.redostack=[] ;
-  },
-  drageNewE(e) {
-  if (this.draggedShapeIndex !== null) {
-    this.shapes.ellipses[this.draggedShapeIndex].x = e.target.attrs.x;
-    this.shapes.ellipses[this.draggedShapeIndex].y = e.target.attrs.y;
-    console.log(this.shapes.ellipses);
-  }
-  this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-  this.redostack=[] ;
-},
-drageNewT(e) {
-  if (this.draggedShapeIndex !== null) {
-    this.shapes.triangles[this.draggedShapeIndex].x = e.target.attrs.x;
-    this.shapes.triangles[this.draggedShapeIndex].y = e.target.attrs.y;
-    console.log(this.shapes.triangles);
-  }
-  this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-  this.redostack=[] ;
-},
-undo(){
-  if(this.undostack.length > 1){
-    this.redostack.push(JSON.parse(JSON.stringify(this.undostack.pop()))) ;
-    this.shapes = JSON.parse(JSON.stringify(this.undostack[this.undostack.length-1]));
-    this.stageKey += 1 ;
-  }
-
-},
-redo(){
-  if(this.redostack.length > 0){
-    this.shapes = JSON.parse(JSON.stringify(this.redostack[this.redostack.length-1]));
-    this.undostack.push(JSON.parse(JSON.stringify(this.redostack.pop()))) ;
-    this.stageKey += 1 ;
-  }
-} ,
-getPathSave() {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.circles[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.circles[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(this.shapes.circles);
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    drageNewR(e) {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.rectangles[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.rectangles[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(this.shapes.rectangles);
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    drageNewL(e) {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.lines[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.lines[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(this.shapes.lines);
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    drageNewS(e) {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.squares[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.squares[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(JSON.stringify(this.shapes.squares));
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    drageNewE(e) {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.ellipses[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.ellipses[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(this.shapes.ellipses);
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    drageNewT(e) {
+      if (this.draggedShapeIndex !== null) {
+        this.shapes.triangles[this.draggedShapeIndex].x = e.target.attrs.x;
+        this.shapes.triangles[this.draggedShapeIndex].y = e.target.attrs.y;
+        console.log(this.shapes.triangles);
+      }
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+    },
+    undo() {
+      if (this.undostack.length > 1) {
+        this.redostack.push(JSON.parse(JSON.stringify(this.undostack.pop())));
+        this.shapes = JSON.parse(
+          JSON.stringify(this.undostack[this.undostack.length - 1])
+        );
+        this.stageKey += 1;
+      }
+    },
+    redo() {
+      if (this.redostack.length > 0) {
+        this.shapes = JSON.parse(
+          JSON.stringify(this.redostack[this.redostack.length - 1])
+        );
+        this.undostack.push(JSON.parse(JSON.stringify(this.redostack.pop())));
+        this.stageKey += 1;
+      }
+    },
+    getPathSave() {
       this.getPath = "save";
     },
     getPathLoad() {
@@ -676,285 +723,299 @@ getPathSave() {
       })
         .then((res) => res.json())
         .then((data) => {
-        if(filePath.includes("json")){
-          //circles
-          for (let i = 0; i < data[0].length; i++) {
-            this.shapes.circles.push(data[0][i]);
+          if (filePath.includes("json")) {
+            //circles
+            for (let i = 0; i < data[0].length; i++) {
+              this.shapes.circles.push(data[0][i]);
+            }
+            //squares
+            for (let i = 0; i < data[1].length; i++) {
+              this.shapes.squares.push(data[1][i]);
+            }
+            //rectangles
+            for (let i = 0; i < data[2].length; i++) {
+              this.shapes.rectangles.push(data[2][i]);
+            }
+            //ellipses
+            for (let i = 0; i < data[3].length; i++) {
+              this.shapes.ellipses.push(data[3][i]);
+            }
+            //triangles
+            for (let i = 0; i < data[4].length; i++) {
+              this.shapes.triangles.push(data[4][i]);
+              console.log(data[4][i]);
+            }
+            //lines
+            for (let i = 0; i < data[5].length; i++) {
+              this.shapes.lines.push(data[5][i]);
+            }
+          } else {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+              if (data[i].type === "triangle") {
+                this.shapes.triangles.push({
+                  index: this.shapes.triangles.length,
+                  id: this.shapeIdCounter++,
+                  type: "triangle",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  sides: 3,
+                  radius: parseFloat(data[i].radius),
+                  fill: data[i].fill,
+                  stroke: data[i].stroke,
+                  strokeWidth: parseInt(data[i].strokeWidth),
+                });
+              }
+              if (data[i].type === "square") {
+                this.shapes.squares.push({
+                  index: this.shapes.squares.length,
+                  id: this.shapeIdCounter++,
+                  type: "square",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  width: parseFloat(data[i]),
+                  height: parseFloat(data[i].height),
+                  fill: data[i].fill,
+                  stroke: data[i].stroke,
+                  strokeWidth: parseInt(data[i].strokeWidth),
+                });
+              }
+              if (data[i].type === "rectangle") {
+                this.shapes.rectangles.push({
+                  index: this.shapes.rectangles.length,
+                  id: this.shapeIdCounter++,
+                  type: "rectangle",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  width: parseFloat(data[i].width),
+                  height: parseFloat(data[i].height),
+                  fill: data[i].fill,
+                  stroke: data[i].stroke,
+                  strokeWidth: parseInt(data[i].strokeWidth),
+                });
+              }
+              if (data[i].type === "line") {
+                this.shapes.lines.push({
+                  index: this.shapes.lines.length,
+                  type: "line",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  points: data[i].points.map((str) => parseFloat(str)),
+                  stroke: data[i].stroke,
+                  strokeWidth: parseInt(data[i].strokeWidth),
+                });
+              }
+              if (data[i].type === "circle") {
+                this.shapes.circles.push({
+                  index: this.shapes.circles.length,
+                  id: this.shapeIdCounter++,
+                  type: "circle",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  radius: parseFloat(data[i].radius),
+                  fill: data[i].fill,
+                  stroke: data[i].stroke,
+                  strokeWidth: parseFloat(data[i].strokeWidth),
+                });
+              }
+              if (data[i].type === "ellipse") {
+                this.shapes.ellipses.push({
+                  index: this.shapes.ellipses.length,
+                  id: this.shapeIdCounter++,
+                  type: "ellipse",
+                  x: parseFloat(data[i].x),
+                  y: parseFloat(data[i].y),
+                  radiusX: parseFloat(data[i].radiusX),
+                  radiusY: parseFloat(data[i].radiusY),
+                  fill: data[i].fill,
+                  stroke: data[i].stroke,
+                  strokeWidth: parseInt(data[i].strokeWidth),
+                });
+              }
+            }
           }
-          //squares
-          for (let i = 0; i < data[1].length; i++) {
-            this.shapes.squares.push(data[1][i]);
-          }
-          //rectangles
-          for (let i = 0; i < data[2].length; i++) {
-            this.shapes.rectangles.push(data[2][i]);
-          }
-          //ellipses
-          for (let i = 0; i < data[3].length; i++) {
-            this.shapes.ellipses.push(data[3][i]);
-          }
-          //triangles
-          for (let i = 0; i < data[4].length; i++) {
-            this.shapes.triangles.push(data[4][i]);
-            console.log(data[4][i]);
-          }
-          //lines
-          for (let i = 0; i < data[5].length; i++) {
-            this.shapes.lines.push(data[5][i]);
-          }
-        }
-        else{
-          for(let i=0;i<data.length;i++){
-if(data[i].type==="triangle"){
-        this.shapes.triangles.push({
-        index: data[i].index.valueOf(),
-        id: data[i].id.valueOf(),
-        type:"triangle",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        sides:3,
-        radius: data[i].radius.valueOf(),
-        fill: data[i].fill,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-        });
-      }
-      if(data[i].type==="square"){
-        this.shapes.squares.push({
-        index: this.shapes.squares.length,
-        id: this.shapeIdCounter++,
-        type:"square",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        width:data[i].width.valueOf(),
-        height:data[i].height.valueOf(),
-        fill: data[i].fill,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-    });
-      }
-      if(data[i].type==="rectangle"){
-        this.shapes.rectangles.push({
-        index: this.shapes.rectangles.length,
-        id: this.shapeIdCounter++,
-        type:"rectangle",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        width:data[i].width.valueOf(),
-        height:data[i].height.valueOf(),
-        fill: data[i].fill,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-      });      
-      }
-      if(data[i].type==="line"){
-        this.shapes.lines.push({
-        index: this.shapes.lines.length,
-        type:"line",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        points: data[i].points,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-      });
-      }
-      if(data[i].type==="circle"){
-        this.shapes.circles.push({
-        index: data[i].index.valueOf(),
-        id:data[i].id.valueOf(),
-        type:"circle",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        radius: data[i].radius.valueOf(),
-        fill: data[i].fill,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-
-      });
-      }
-      if(data[i].type==="ellipse"){
-        this.shapes.ellipses.push({
-        index: this.shapes.ellipses.length,
-        id: this.shapeIdCounter++,
-        type:"ellipse",
-        x: data[i].x.valueOf(),
-        y: data[i].y.valueOf(),
-        radiusX: data[i].radiusX.valueOf(),
-        radiusY: data[i].radiusY.valueOf(),
-        fill: data[i].fill,
-        stroke: data[i].stroke,
-        strokeWidth: data[i].strokeWidth.valueOf(),
-  });
-      }
-          }
-        }
         })
         .catch((err) => {
           console.log(err);
         });
     },
-  setColor(color) {
-      this.selectedColor =this.hexToColorNameWithComparison(color);
+    setColor(color) {
+      this.selectedColor = this.hexToColorNameWithComparison(color);
     },
-     hexToColorNameWithComparison(hexCode)  {
+    hexToColorNameWithComparison(hexCode) {
       let colorMappings = {
-        '#FF0000': 'Red',
-        '#FF7F00': 'Orange',
-        '#FFFF00': 'Yellow',
-        '#7FFF00': 'Chartreuse',
-        '#00FF00': 'Lime',
-        '#00FF7F': 'Spring Green',
-        '#00FFFF': 'Cyan',
-        '#007FFF': 'Azure',
-        '#0000FF': 'Blue',
-        '#7F00FF': 'Violet',
-        '#FF00FF': 'Magenta',
-        '#FF007F': 'Rose',
-        '#FFFFFF': 'White',
-        '#C0C0C0': 'Silver',
-        '#808080': 'Gray',
-        '#000000': 'Black',
+        "#FF0000": "Red",
+        "#FF7F00": "Orange",
+        "#FFFF00": "Yellow",
+        "#7FFF00": "Chartreuse",
+        "#00FF00": "Lime",
+        "#00FF7F": "Spring Green",
+        "#00FFFF": "Cyan",
+        "#007FFF": "Azure",
+        "#0000FF": "Blue",
+        "#7F00FF": "Violet",
+        "#FF00FF": "Magenta",
+        "#FF007F": "Rose",
+        "#FFFFFF": "White",
+        "#C0C0C0": "Silver",
+        "#808080": "Gray",
+        "#000000": "Black",
       };
 
       let colorName = colorMappings[hexCode.toUpperCase()];
-      return colorName ? colorName : 'Unknown';
-},
-  mousedownhandler(){
-      this.isdrawing = true ;
-        const stage = this.$refs.stage.getStage();
-        const mousePos = stage.getPointerPosition();
-      if(this.drawing === 'rectangle'){
-      this.shapes.rectangles.push({
-        index: this.shapes.rectangles.length,
-        id: this.shapeIdCounter++,
-        type:"rectangle",
-        x: mousePos.x,
-        y: mousePos.y,
-        width:0,
-        height:0,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-      });
-    }
-    else if(this.drawing === 'circle'){
-      this.shapes.circles.push({
-        index: this.shapes.circles.length,
-        id:this.initID++,
-        type:"circle",
-        x: mousePos.x,
-        y: mousePos.y,
-        radius: 0,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-
-      });
-    }
-    else if(this.drawing === "ellipse"){
-      this.shapes.ellipses.push({
-      index: this.shapes.ellipses.length,
-      id: this.shapeIdCounter++,
-      type:"ellipse",
-      x: mousePos.x,
-      y: mousePos.y,
-      radiusX: 0,
-      radiusY: 0,
-      fill: "blue",
-      stroke: "black",
-      strokeWidth: 4,
-  });
-    }
-    else if(this.drawing === "line"){
-      this.shapes.lines.push({
-        index: this.shapes.lines.length,
-        type:"line",
-        x: mousePos.x,
-        y: mousePos.y,
-        points: [0, 0, 0, 0],
-        stroke: 'green',
-        strokeWidth: 5,
-      });
-    }
-    else if(this.drawing === "triangle"){
-      this.shapes.triangles.push({
-      index: this.shapes.triangles.length,
-      id: this.shapeIdCounter++,
-      type:"triangle",
-      x: mousePos.x,
-      y: mousePos.y,
-      sides:3,
-      radius: 0,
-      fill: "blue",
-      stroke: "black",
-      strokeWidth: 4,
-  });
-    }
-    else if(this.drawing === "square"){
-      this.shapes.squares.push({
-        index: this.shapes.squares.length,
-        id: this.shapeIdCounter++,
-        type:"square",
-        x: mousePos.x,
-        y: mousePos.y,
-        width:0,
-        height:0,
-        fill: "pink",
-        stroke: "black",
-        strokeWidth: 4,
-    });
-    }
+      return colorName ? colorName : "Unknown";
     },
-    mouseuphandler(){
-      if(this.drawing != "none"){
-        this.drawing = "none" ;
-      }
-      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
-      this.redostack=[] ;
-      this.isdrawing = false ;
-    },
-    mousemovehandler(){
-      if(this.isdrawing && (this.drawing != "none")){
+    mousedownhandler() {
+      this.isdrawing = true;
       const stage = this.$refs.stage.getStage();
       const mousePos = stage.getPointerPosition();
-      if(this.drawing === "rectangle"){
-        let newwidth = mousePos.x - this.shapes.rectangles[this.shapes.rectangles.length-1].x ; 
-        let newheight = mousePos.y - this.shapes.rectangles[this.shapes.rectangles.length-1].y ;
-        this.shapes.rectangles[this.shapes.rectangles.length-1].width = newwidth ;
-        this.shapes.rectangles[this.shapes.rectangles.length-1].height = newheight ;
+      if (this.drawing === "rectangle") {
+        this.shapes.rectangles.push({
+          index: this.shapes.rectangles.length,
+          id: this.shapeIdCounter++,
+          type: "rectangle",
+          x: mousePos.x,
+          y: mousePos.y,
+          width: 0,
+          height: 0,
+          fill: "red",
+          stroke: "black",
+          strokeWidth: 4,
+        });
+      } else if (this.drawing === "circle") {
+        this.shapes.circles.push({
+          index: this.shapes.circles.length,
+          id: this.initID++,
+          type: "circle",
+          x: mousePos.x,
+          y: mousePos.y,
+          radius: 0,
+          fill: "red",
+          stroke: "black",
+          strokeWidth: 4,
+        });
+      } else if (this.drawing === "ellipse") {
+        this.shapes.ellipses.push({
+          index: this.shapes.ellipses.length,
+          id: this.shapeIdCounter++,
+          type: "ellipse",
+          x: mousePos.x,
+          y: mousePos.y,
+          radiusX: 0,
+          radiusY: 0,
+          fill: "blue",
+          stroke: "black",
+          strokeWidth: 4,
+        });
+      } else if (this.drawing === "line") {
+        this.shapes.lines.push({
+          index: this.shapes.lines.length,
+          type: "line",
+          x: mousePos.x,
+          y: mousePos.y,
+          points: [0, 0, 0, 0],
+          stroke: "green",
+          strokeWidth: 5,
+        });
+      } else if (this.drawing === "triangle") {
+        this.shapes.triangles.push({
+          index: this.shapes.triangles.length,
+          id: this.shapeIdCounter++,
+          type: "triangle",
+          x: mousePos.x,
+          y: mousePos.y,
+          sides: 3,
+          radius: 0,
+          fill: "blue",
+          stroke: "black",
+          strokeWidth: 4,
+        });
+      } else if (this.drawing === "square") {
+        this.shapes.squares.push({
+          index: this.shapes.squares.length,
+          id: this.shapeIdCounter++,
+          type: "square",
+          x: mousePos.x,
+          y: mousePos.y,
+          width: 0,
+          height: 0,
+          fill: "pink",
+          stroke: "black",
+          strokeWidth: 4,
+        });
       }
-      else if(this.drawing === "circle"){
-        let newwidth = mousePos.x - this.shapes.circles[this.shapes.circles.length-1].x ; 
-        let newheight = mousePos.y - this.shapes.circles[this.shapes.circles.length-1].y ;
-        let rad = Math.sqrt(Math.pow(newheight,2) + Math.pow(newwidth,2)) ;
-        this.shapes.circles[this.shapes.circles.length-1].radius = rad ;
+    },
+    mouseuphandler() {
+      if (this.drawing != "none") {
+        this.drawing = "none";
       }
-      else if(this.drawing === "ellipse"){
-        let newwidth = mousePos.x - this.shapes.ellipses[this.shapes.ellipses.length-1].x ; 
-        let newheight = mousePos.y - this.shapes.ellipses[this.shapes.ellipses.length-1].y ;
-        this.shapes.ellipses[this.shapes.ellipses.length-1].radiusX = Math.abs(newwidth) ;
-        this.shapes.ellipses[this.shapes.ellipses.length-1].radiusY = Math.abs(newheight) ;
+      this.undostack.push(JSON.parse(JSON.stringify(this.shapes)));
+      this.redostack = [];
+      this.isdrawing = false;
+    },
+    mousemovehandler() {
+      if (this.isdrawing && this.drawing != "none") {
+        const stage = this.$refs.stage.getStage();
+        const mousePos = stage.getPointerPosition();
+        if (this.drawing === "rectangle") {
+          let newwidth =
+            mousePos.x -
+            this.shapes.rectangles[this.shapes.rectangles.length - 1].x;
+          let newheight =
+            mousePos.y -
+            this.shapes.rectangles[this.shapes.rectangles.length - 1].y;
+          this.shapes.rectangles[this.shapes.rectangles.length - 1].width =
+            newwidth;
+          this.shapes.rectangles[this.shapes.rectangles.length - 1].height =
+            newheight;
+        } else if (this.drawing === "circle") {
+          let newwidth =
+            mousePos.x - this.shapes.circles[this.shapes.circles.length - 1].x;
+          let newheight =
+            mousePos.y - this.shapes.circles[this.shapes.circles.length - 1].y;
+          let rad = Math.sqrt(Math.pow(newheight, 2) + Math.pow(newwidth, 2));
+          this.shapes.circles[this.shapes.circles.length - 1].radius = rad;
+        } else if (this.drawing === "ellipse") {
+          let newwidth =
+            mousePos.x -
+            this.shapes.ellipses[this.shapes.ellipses.length - 1].x;
+          let newheight =
+            mousePos.y -
+            this.shapes.ellipses[this.shapes.ellipses.length - 1].y;
+          this.shapes.ellipses[this.shapes.ellipses.length - 1].radiusX =
+            Math.abs(newwidth);
+          this.shapes.ellipses[this.shapes.ellipses.length - 1].radiusY =
+            Math.abs(newheight);
+        } else if (this.drawing === "line") {
+          let newwidth =
+            mousePos.x - this.shapes.lines[this.shapes.lines.length - 1].x;
+          let newheight =
+            mousePos.y - this.shapes.lines[this.shapes.lines.length - 1].y;
+          this.shapes.lines[this.shapes.lines.length - 1].points = [
+            0,
+            0,
+            newwidth,
+            newheight,
+          ];
+        } else if (this.drawing === "triangle") {
+          let newwidth =
+            mousePos.x -
+            this.shapes.triangles[this.shapes.triangles.length - 1].x;
+          let newheight =
+            mousePos.y -
+            this.shapes.triangles[this.shapes.triangles.length - 1].y;
+          let rad = Math.sqrt(Math.pow(newheight, 2) + Math.pow(newwidth, 2));
+          this.shapes.triangles[this.shapes.triangles.length - 1].radius = rad;
+        } else if (this.drawing === "square") {
+          let newwidth =
+            mousePos.x - this.shapes.squares[this.shapes.squares.length - 1].x;
+          this.shapes.squares[this.shapes.squares.length - 1].width = newwidth;
+          this.shapes.squares[this.shapes.squares.length - 1].height = newwidth;
+        }
       }
-      else if(this.drawing ==="line"){
-        let newwidth = mousePos.x - this.shapes.lines[this.shapes.lines.length-1].x ; 
-        let newheight = mousePos.y - this.shapes.lines[this.shapes.lines.length-1].y ;
-        this.shapes.lines[this.shapes.lines.length-1].points = [0 , 0 , newwidth,newheight] ;
-      }
-      else if(this.drawing === "triangle"){
-        let newwidth = mousePos.x - this.shapes.triangles[this.shapes.triangles.length-1].x ; 
-        let newheight = mousePos.y - this.shapes.triangles[this.shapes.triangles.length-1].y ;
-        let rad = Math.sqrt(Math.pow(newheight,2) + Math.pow(newwidth,2)) ;
-        this.shapes.triangles[this.shapes.triangles.length-1].radius = rad ;
-      }
-      else if(this.drawing === 'square'){
-        let newwidth = mousePos.x - this.shapes.squares[this.shapes.squares.length-1].x ; 
-        this.shapes.squares[this.shapes.squares.length-1].width = newwidth ;
-        this.shapes.squares[this.shapes.squares.length-1].height = newwidth ;
-      }
-      }
-    }
-  } ,
-}
+    },
+  },
+};
 </script>
 
 <style>
