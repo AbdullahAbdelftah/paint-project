@@ -707,8 +707,8 @@ getPathSave() {
           for(let i=0;i<data.length;i++){
 if(data[i].type==="triangle"){
         this.shapes.triangles.push({
-        index: this.shapes.triangles.length,
-        id: this.shapeIdCounter++,
+        index: data[i].index.valueOf(),
+        id: data[i].id.valueOf(),
         type:"triangle",
         x: data[i].x.valueOf(),
         y: data[i].y.valueOf(),
