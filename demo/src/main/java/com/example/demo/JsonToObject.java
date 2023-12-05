@@ -197,8 +197,9 @@ public class JsonToObject {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode orderedJsonNode = objectMapper.createObjectNode();
             orderedJsonNode.setAll((ObjectNode) jsonNode);
-            String jsonString = orderedJsonNode.toString();
-            jsonString= jsonString.replaceAll("\\{\"circle\":", "[");
+            String jsonString = "[";
+            jsonString += orderedJsonNode.toString();
+            jsonString= jsonString.replaceAll("\\{\"circle\":", "");
             jsonString= jsonString.replaceAll("\"square\":", "");
             jsonString= jsonString.replaceAll("\"triangle\":", "");
             jsonString= jsonString.replaceAll("\"rectangle\":", "");

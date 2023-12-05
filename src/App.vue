@@ -1,78 +1,200 @@
 <template>
   <div class="bts">
-    <button :style="{ backgroundColor: (drawing === 'circle') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Circle)"><i class="fa-solid fa-circle"></i></button>
-    <button :style="{ backgroundColor: (drawing === 'ellipse') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Ellipse)">ellipse</button>
-    <button :style="{ backgroundColor: (drawing === 'rectangle') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Rectangle)"><i class="fa-solid fa-rectangle-list"></i></button>
-    <button :style="{ backgroundColor: (drawing === 'line') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Line)"><i class="fa-solid fa-grip-lines"></i></button>
-    <button :style="{ backgroundColor: (drawing === 'square') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Square)"><i class="fa-solid fa-square"></i></button>
-    <button :style="{ backgroundColor: (drawing === 'triangle') ? 'green' : '' }" class="button-89" role="button" @click="createShape(Triangle)"><i class="fa-solid fa-caret-up"></i></button>
+    <button
+      :style="{ backgroundColor: drawing === 'circle' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Circle)"
+    >
+      <i class="fa-solid fa-circle"></i>
+    </button>
+    <button
+      :style="{ backgroundColor: drawing === 'ellipse' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Ellipse)"
+    >
+      ellipse
+    </button>
+    <button
+      :style="{ backgroundColor: drawing === 'rectangle' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Rectangle)"
+    >
+      <i class="fa-solid fa-rectangle-list"></i>
+    </button>
+    <button
+      :style="{ backgroundColor: drawing === 'line' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Line)"
+    >
+      <i class="fa-solid fa-grip-lines"></i>
+    </button>
+    <button
+      :style="{ backgroundColor: drawing === 'square' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Square)"
+    >
+      <i class="fa-solid fa-square"></i>
+    </button>
+    <button
+      :style="{ backgroundColor: drawing === 'triangle' ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="createShape(Triangle)"
+    >
+      <i class="fa-solid fa-caret-up"></i>
+    </button>
     <button class="button-89" role="button" @click="getPathLoad()">
       <i class="fas fa-upload"></i>
     </button>
     <button class="button-89" role="button" @click="getPathSave()">
       <i class="fas fa-download"></i>
     </button>
-    <div v-show="getPath=='save'" class="path">
+    <div v-show="getPath == 'save'" class="path">
       <label>Path:</label>
       <input type="text" v-model="filePath" />
       <button class="btn" @click="save(this.filePath)">Confirm</button>
     </div>
-    <div v-show="getPath=='load'" class="path">
+    <div v-show="getPath == 'load'" class="path">
       <label>Path:</label>
       <input type="text" v-model="filePath" />
       <button class="btn" @click="load(this.filePath)">Confirm</button>
     </div>
-    <button class="button-89" role="button" @click="undo()"><i class="fa-solid fa-rotate-left"></i></button>
-    <button class="button-89" role="button" @click="redo()"><i class="fa-solid fa-rotate-right"></i></button>
-    <button :style="{ backgroundColor: copy ? 'green' : '' }" class="button-89" role="button" @click="ChangeToCopy()">COPY</button>
-    <button :style="{ backgroundColor: deletee ? 'red' : '' }" class="button-89" role="button" @click="ChangeToDelete()">Delete</button>
+    <button class="button-89" role="button" @click="undo()">
+      <i class="fa-solid fa-rotate-left"></i>
+    </button>
+    <button class="button-89" role="button" @click="redo()">
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
+    <button
+      :style="{ backgroundColor: copy ? 'green' : '' }"
+      class="button-89"
+      role="button"
+      @click="ChangeToCopy()"
+    >
+      COPY
+    </button>
+    <button
+      :style="{ backgroundColor: deletee ? 'red' : '' }"
+      class="button-89"
+      role="button"
+      @click="ChangeToDelete()"
+    >
+      Delete
+    </button>
   </div>
   <div class="all">
     <div class="stage">
       <div class="clrs">
         <div class="colors">
-          <div v-for="(color, index) in colorPalette" :key="index" @click="setColor(color)">
+          <div
+            v-for="(color, index) in colorPalette"
+            :key="index"
+            @click="setColor(color)"
+          >
             <div :style="{ backgroundColor: color }" class="color-square"></div>
           </div>
         </div>
-        <div>
-          Selected Color: {{ selectedColor }}
-        </div>
+        <div>Selected Color: {{ selectedColor }}</div>
       </div>
-      <v-stage :config="configKonva" ref="stage" :key="stageKey" @mousedown="mousedownhandler" @mousemove="mousemovehandler" @mouseup="mouseuphandler">
+      <v-stage
+        :config="configKonva"
+        ref="stage"
+        :key="stageKey"
+        @mousedown="mousedownhandler"
+        @mousemove="mousemovehandler"
+        @mouseup="mouseuphandler"
+      >
         <v-layer>
-          <v-circle v-for="(circle, index) in shapes.circles" :key="circle.id" draggable="true" @dragstart="newInd(index)" :config="circle" @dragend="drageNew" @dblclick="showResizeForm(index,circle)" @click="changeColor(circle)"></v-circle>
-          <v-rect v-for="(rect, index) in shapes.rectangles" :key="rect.id" draggable="true" @dragstart="newInd(index)" :config="rect" @dragend="drageNewR" @dblclick="showResizeForm(index,rect)" @click="changeColor(rect)"></v-rect>
-          <v-line v-for="(line, index) in shapes.lines" :key="line.id" draggable="true" @dragstart="newInd(index)" :config="line" @dragend="drageNewL" @dblclick="showResizeForm(index,line)" @click="changeColor(line)"></v-line>
-          <v-rect v-for="(sq, index) in shapes.squares" :key="sq.id" draggable="true" @dragstart="newInd(index)" :config="sq" @dragend="drageNewS" @dblclick="showResizeForm(index,sq)" @click="changeColor(sq)"></v-rect>
-          <v-ellipse v-for="(ellipse, index) in shapes.ellipses" :key="ellipse.id" draggable="true" @dragstart="newInd(index)" :config="ellipse" @dragend="drageNewE" @dblclick="showResizeForm(index,ellipse)" @click="changeColor(ellipse)"></v-ellipse>
-          <v-regular-polygon v-for="triangle in shapes.triangles" :key="triangle.id" :config="triangle"  draggable="true" @dragstart="newInd(triangle.index)" @dragend="drageNewT" @click="changeColor(triangle)"/>
-        </v-layer >
+          <v-circle
+            v-for="(circle, index) in shapes.circles"
+            :key="circle.id"
+            draggable="true"
+            @dragstart="newInd(index)"
+            :config="circle"
+            @dragend="drageNew"
+            @dblclick="showResizeForm(index, circle)"
+            @click="changeColor(circle)"
+          ></v-circle>
+          <v-rect
+            v-for="(rect, index) in shapes.rectangles"
+            :key="rect.id"
+            draggable="true"
+            @dragstart="newInd(index)"
+            :config="rect"
+            @dragend="drageNewR"
+            @dblclick="showResizeForm(index, rect)"
+            @click="changeColor(rect)"
+          ></v-rect>
+          <v-line
+            v-for="(line, index) in shapes.lines"
+            :key="line.id"
+            draggable="true"
+            @dragstart="newInd(index)"
+            :config="line"
+            @dragend="drageNewL"
+            @dblclick="showResizeForm(index, line)"
+            @click="changeColor(line)"
+          ></v-line>
+          <v-rect
+            v-for="(sq, index) in shapes.squares"
+            :key="sq.id"
+            draggable="true"
+            @dragstart="newInd(index)"
+            :config="sq"
+            @dragend="drageNewS"
+            @dblclick="showResizeForm(index, sq)"
+            @click="changeColor(sq)"
+          ></v-rect>
+          <v-ellipse
+            v-for="(ellipse, index) in shapes.ellipses"
+            :key="ellipse.id"
+            draggable="true"
+            @dragstart="newInd(index)"
+            :config="ellipse"
+            @dragend="drageNewE"
+            @dblclick="showResizeForm(index, ellipse)"
+            @click="changeColor(ellipse)"
+          ></v-ellipse>
+          <v-regular-polygon
+            v-for="triangle in shapes.triangles"
+            :key="triangle.id"
+            :config="triangle"
+            draggable="true"
+            @dragstart="newInd(triangle.index)"
+            @dragend="drageNewT"
+            @click="changeColor(triangle)"
+          />
+        </v-layer>
       </v-stage>
     </div>
   </div>
   <div v-if="showForm">
-    <label v-if="selectedShapeType==='rectangle'">
+    <label v-if="selectedShapeType === 'rectangle'">
       Width:
       <input type="number" v-model="resizeForm.width" />
     </label>
-    <label v-if="selectedShapeType==='rectangle'">
+    <label v-if="selectedShapeType === 'rectangle'">
       Height:
       <input type="number" v-model="resizeForm.height" />
     </label>
-    <label v-if="selectedShapeType==='square'">
+    <label v-if="selectedShapeType === 'square'">
       side length:
       <input type="number" v-model="resizeForm.width" />
     </label>
-    <label v-if="selectedShapeType==='circle'">
+    <label v-if="selectedShapeType === 'circle'">
       radius:
       <input type="number" v-model="resizeForm.width" />
     </label>
-    <label v-if="selectedShapeType==='ellipse'">
+    <label v-if="selectedShapeType === 'ellipse'">
       radiusX:
       <input type="number" v-model="resizeForm.width" />
     </label>
-    <label v-if="selectedShapeType==='ellipse'">
+    <label v-if="selectedShapeType === 'ellipse'">
       radiusY:
       <input type="number" v-model="resizeForm.height" />
     </label>
@@ -554,6 +676,7 @@ getPathSave() {
       })
         .then((res) => res.json())
         .then((data) => {
+        if(filePath.includes("json")){
           //circles
           for (let i = 0; i < data[0].length; i++) {
             this.shapes.circles.push(data[0][i]);
@@ -579,6 +702,92 @@ getPathSave() {
           for (let i = 0; i < data[5].length; i++) {
             this.shapes.lines.push(data[5][i]);
           }
+        }
+        else{
+          for(let i=0;i<data.length;i++){
+if(data[i].type==="triangle"){
+        this.shapes.triangles.push({
+        index: this.shapes.triangles.length,
+        id: this.shapeIdCounter++,
+        type:"triangle",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        sides:3,
+        radius: data[i].radius.valueOf(),
+        fill: data[i].fill,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+        });
+      }
+      if(data[i].type==="square"){
+        this.shapes.squares.push({
+        index: this.shapes.squares.length,
+        id: this.shapeIdCounter++,
+        type:"square",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        width:data[i].width.valueOf(),
+        height:data[i].height.valueOf(),
+        fill: data[i].fill,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+    });
+      }
+      if(data[i].type==="rectangle"){
+        this.shapes.rectangles.push({
+        index: this.shapes.rectangles.length,
+        id: this.shapeIdCounter++,
+        type:"rectangle",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        width:data[i].width.valueOf(),
+        height:data[i].height.valueOf(),
+        fill: data[i].fill,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+      });      
+      }
+      if(data[i].type==="line"){
+        this.shapes.lines.push({
+        index: this.shapes.lines.length,
+        type:"line",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        points: data[i].points,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+      });
+      }
+      if(data[i].type==="circle"){
+        this.shapes.circles.push({
+        index: this.shapes.circles.length,
+        id:this.initID++,
+        type:"circle",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        radius: data[i].radius.valueOf(),
+        fill: data[i].fill,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+
+      });
+      }
+      if(data[i].type==="ellipse"){
+        this.shapes.ellipses.push({
+        index: this.shapes.ellipses.length,
+        id: this.shapeIdCounter++,
+        type:"ellipse",
+        x: data[i].x.valueOf(),
+        y: data[i].y.valueOf(),
+        radiusX: data[i].radiusX,
+        radiusY: data[i].radiusY,
+        fill: data[i].fill,
+        stroke: data[i].stroke,
+        strokeWidth: data[i].strokeWidth.valueOf(),
+  });
+      }
+          }
+        }
         })
         .catch((err) => {
           console.log(err);
@@ -756,9 +965,8 @@ getPathSave() {
   text-align: center;
   color: #2c3e50;
   margin-top: 0px;
-  
 }
-body{
+body {
   background-image: url("vecteezy_simple-childish-scribble-backdrop-colorful-doodle-art_8362482.jpg");
 }
 .all {
@@ -773,18 +981,18 @@ body{
   align-items: center;
 }
 
-.stage{
+.stage {
   border: #2c3e50 1px solid;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
-  align-items:center ;
+  align-items: center;
 }
-button{
+button {
   width: 100px;
   height: 50px;
 }
-.bts{
+.bts {
   width: 100%;
   display: flex;
   flex-flow: row wrap;
@@ -797,29 +1005,32 @@ button{
   cursor: pointer;
   margin: 5px;
 }
-.clrs{
+.clrs {
   display: flex;
   flex-flow: column wrap;
   border: #000 1px solid;
 }
-.stage{
+.stage {
   background-color: white;
 }
 
 .button-89 {
-  --b: 3px;  
-  --s: .45em;
-  --color: #373B44;
-  
-  padding: calc(.5em + var(--s)) calc(.9em + var(--s));
+  --b: 3px;
+  --s: 0.45em;
+  --color: #373b44;
+
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
   color: var(--color);
   --_p: var(--s);
-  background:
-    conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0)
-    var(--_p) var(--_p)/calc(100% - 2*var(--_p)) calc(100% - 2*var(--_p)); /* Modified this line */
-  transition: .3s linear, color 0s, background-color 0s;
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #0000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - 2 * var(--_p)) calc(100% - 2 * var(--_p)); /* Modified this line */
+  transition: 0.3s linear, color 0s, background-color 0s;
   outline: var(--b) solid #0000;
-  outline-offset: .6em;
+  outline-offset: 0.6em;
   font-size: 16px;
 
   border: 0;
@@ -829,19 +1040,18 @@ button{
   touch-action: manipulation;
 }
 
-
 .button-89:hover,
-.button-89:focus-visible{
+.button-89:focus-visible {
   --_p: 0px;
   outline-color: var(--color);
-  outline-offset: .05em;
+  outline-offset: 0.05em;
 }
 
 .button-89:active {
   background: var(--color);
   color: #fff;
 }
-.colors{
+.colors {
   display: flex;
 }
 input {
@@ -858,7 +1068,7 @@ label {
   letter-spacing: 1px;
   font-weight: bold;
 }
-.path{
+.path {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -872,6 +1082,6 @@ label {
   opacity: 0.7;
   border-radius: 10px;
   border: 2px solid transparent;
-  outline:#2c3e50 3px solid;
+  outline: #2c3e50 3px solid;
 }
 </style>
