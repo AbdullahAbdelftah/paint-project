@@ -844,4 +844,34 @@ button{
 .colors{
   display: flex;
 }
+input {
+  margin-right: 5px;
+  display: block;
+  padding: 2px 1px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #ddd;
+}
+label {
+  margin: 25px 0px 15px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+.path{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 150px;
+  z-index: 1;
+  padding: 100px 150px;
+  background-color: black;
+  color: white;
+  opacity: 0.7;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  outline:#2c3e50 3px solid;
+}
 </style>
