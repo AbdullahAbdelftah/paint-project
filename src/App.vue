@@ -773,7 +773,7 @@ export default {
                   type: "square",
                   x: parseFloat(data[i].x),
                   y: parseFloat(data[i].y),
-                  width: parseFloat(data[i]),
+                  width: parseFloat(data[i].width),
                   height: parseFloat(data[i].height),
                   fill: data[i].fill,
                   stroke: data[i].stroke,
@@ -910,6 +910,7 @@ export default {
       } else if (this.drawing === "line") {
         this.shapes.lines.push({
           index: this.shapes.lines.length,
+          id: this.shapeIdCounter++,
           type: "line",
           x: mousePos.x,
           y: mousePos.y,
