@@ -760,8 +760,8 @@ if(data[i].type==="triangle"){
       }
       if(data[i].type==="circle"){
         this.shapes.circles.push({
-        index: this.shapes.circles.length,
-        id:this.initID++,
+        index: data[i].index.valueOf(),
+        id:data[i].id.valueOf(),
         type:"circle",
         x: data[i].x.valueOf(),
         y: data[i].y.valueOf(),
@@ -779,8 +779,8 @@ if(data[i].type==="triangle"){
         type:"ellipse",
         x: data[i].x.valueOf(),
         y: data[i].y.valueOf(),
-        radiusX: data[i].radiusX,
-        radiusY: data[i].radiusY,
+        radiusX: data[i].radiusX.valueOf(),
+        radiusY: data[i].radiusY.valueOf(),
         fill: data[i].fill,
         stroke: data[i].stroke,
         strokeWidth: data[i].strokeWidth.valueOf(),

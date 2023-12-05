@@ -206,6 +206,9 @@ public class JsonToObject {
             jsonString= jsonString.replaceAll("\"ellipse\":", "");
             jsonString= jsonString.replaceAll("\"line\":", "");
             jsonString= jsonString.substring(0, jsonString.length()-1);
+            jsonString=jsonString.replaceAll("]", "");
+            jsonString= jsonString.replaceAll("\\[", "");
+            jsonString="["+jsonString;
             jsonString= jsonString.concat("]");
             System.out.println(jsonString);
             return jsonString;
